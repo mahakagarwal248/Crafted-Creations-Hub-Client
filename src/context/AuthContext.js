@@ -6,6 +6,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     try {
@@ -14,6 +15,7 @@ export function AuthProvider({ children }) {
     } catch {
       localStorage.removeItem(AUTH_KEY);
     }
+    setIsHydrated(true);
   }, []);
 
   const login = (userData) => {
@@ -27,7 +29,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isHydrated }}>
       {children}
     </AuthContext.Provider>
   );

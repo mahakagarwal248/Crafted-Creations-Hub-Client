@@ -3,10 +3,23 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function ProductGrid({ data }) {
   const { addToCart } = useOutletContext() || {};
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleAddToCart = (item) => {
+    if (!user) {
+      alert('Please log in to add items to your cart.');
+      navigate('/login', { state: { from: location } });
+      return;
+    }
+    addToCart?.({ productId: item.productId, name: item.name, price: item.price, quantity: 1 });
+  };
 
   return (
     <Container>
@@ -24,7 +37,7 @@ function ProductGrid({ data }) {
                   <Button
                     variant="outline-light"
                     size="sm"
-                    onClick={() => addToCart?.({ productId: ele.productId, name: ele.name, price: ele.price, quantity: 1 })}
+                    onClick={() => handleAddToCart(ele)}
                   >
                     Add to cart
                   </Button>

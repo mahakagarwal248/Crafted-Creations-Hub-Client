@@ -12,14 +12,34 @@ function Home() {
       style={{
         background: "black",
         color: "white",
-        // paddingTop: "25px",
-        // paddingBottom: "25px",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-        <Navbar/>
+      <Navbar />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
+        }}
+      >
         <img src={logo} className="App-logo" alt="logo" />
-        <p style={{ fontSize: "32px" }}>Welcome to Crafted Creations Hub!</p>
-        <Button variant="outline-light" onClick={()=> navigate("/catalogue")}>View Catalogue</Button>
+        <p style={{ fontSize: "32px", textAlign: "center", marginTop: "1rem" }}>
+          Welcome to Crafted Creations Hub!
+        </p>
+        <Button
+          variant="outline-light"
+          onClick={() => navigate("/catalogue")}
+          style={{ marginTop: "1rem" }}
+        >
+          View Catalogue
+        </Button>
+      </div>
     </div>
   );
 }

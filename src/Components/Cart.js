@@ -3,54 +3,69 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
+import Modal from 'react-bootstrap/Modal';
 import Navbar from './Navbar';
-import { addOrders } from '../APIs/Orders';
-
-const DEFAULT_CUSTOMER_ID = '68bf26d76e5cd2f5a15e9cc1';
+import { sendCheckoutEmail } from '../APIs/Checkout';
+import { useAuth } from '../context/AuthContext';
 
 function Cart() {
   const outlet = useOutletContext();
+  const { user } = useAuth();
   const items = outlet?.items ?? [];
   const totalAmount = outlet?.totalAmount ?? 0;
   const updateQuantity = outlet?.updateQuantity ?? (() => {});
   const removeFromCart = outlet?.removeFromCart ?? (() => {});
   const clearCart = outlet?.clearCart ?? (() => {});
   const navigate = useNavigate();
-  const [customerId, setCustomerId] = useState(DEFAULT_CUSTOMER_ID);
-  const [discount, setDiscount] = useState(0);
-  const [amountPaid, setAmountPaid] = useState(0);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ name: '', phone: '', address: '' });
 
-  const handleCheckout = async () => {
+  const openCheckoutModal = () => {
     if (items.length === 0) {
       window.alert('Your cart is empty.');
       return;
     }
-    if (isCheckingOut) return;
-    setIsCheckingOut(true);
+    setFormData({
+      name: user?.name ?? '',
+      phone: user?.phone ?? '',
+      address: user?.address ?? '',
+    });
+    setShowCheckoutModal(true);
+  };
+
+  const handleCheckoutSubmit = async (e) => {
+    e.preventDefault();
+    const { name, phone, address } = formData;
+    if (!name?.trim() || !phone?.toString().trim() || !address?.trim()) {
+      window.alert('Please fill in name, phone and address.');
+      return;
+    }
+    setSubmitting(true);
     try {
-      const payload = {
-        productDetails: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
-        customerId: customerId.trim() || DEFAULT_CUSTOMER_ID,
-        discount: Number(discount) || 0,
-        amountPaid: Number(amountPaid) || 0,
-      };
-      const response = await addOrders(payload);
-      if (response && response.status === 200) {
+      const result = await sendCheckoutEmail({
+        name: name.trim(),
+        phone: phone.toString().trim(),
+        address: address.trim(),
+        cartItems: items,
+        totalAmount,
+      });
+      if (result?.success) {
+        setShowCheckoutModal(false);
         await clearCart();
-        window.alert('Order placed successfully!');
+        window.alert('Details sent successfully! We will contact you soon.');
         navigate('/catalogue');
       } else {
-        window.alert(response?.data?.message || 'Failed to place order.');
+        window.alert(result?.message || 'Something went wrong.');
       }
     } catch (err) {
-      window.alert(err?.response?.data?.message || err?.message || 'Failed to place order.');
+      window.alert(err?.response?.data?.message || err?.message || 'Failed to send. Please try again.');
     } finally {
-      setIsCheckingOut(false);
+      setSubmitting(false);
     }
   };
 
-  if (items.length === 0 && !isCheckingOut) {
+  if (items.length === 0 && !showCheckoutModal) {
     return (
       <div style={{ color: 'white' }}>
         <Navbar />
@@ -64,7 +79,9 @@ function Cart() {
     );
   }
 
-  const formStyle = { maxWidth: 200, marginBottom: '1rem' };
+  // const discountPct = Number(discount) || 0;
+  // const discountAmount = (totalAmount * discountPct) / 100;
+  const totalToPay = totalAmount;
 
   return (
     <div style={{ color: 'white' }}>
@@ -92,7 +109,7 @@ function Cart() {
                   min={1}
                   value={item.quantity}
                   onChange={(e) => updateQuantity(item.productId, e.target.value)}
-                  style={{ width: 70 }}
+                  style={{ width: 70, margin: '0 auto' }}
                 />
               </td>
               <td>₹{item.price * item.quantity}</td>
@@ -109,54 +126,64 @@ function Cart() {
           ))}
         </tbody>
       </Table>
-      <p>
-        <strong>Total: ₹{totalAmount.toFixed(2)}</strong>
-      </p>
-      <div style={{ marginTop: '1.5rem' }}>
-        <Form.Group className="mb-2">
-          <Form.Label>Customer ID</Form.Label>
-          <Form.Control
-            type="text"
-            value={customerId}
-            onChange={(e) => setCustomerId(e.target.value)}
-            placeholder="Customer ID for order"
-            style={formStyle}
-          />
-        </Form.Group>
-        <Form.Group className="mb-2">
-          <Form.Label>Discount (%)</Form.Label>
-          <Form.Control
-            type="number"
-            min={0}
-            value={discount}
-            onChange={(e) => setDiscount(e.target.value)}
-            style={formStyle}
-          />
-        </Form.Group>
-        <Form.Group className="mb-2">
-          <Form.Label>Amount to pay now</Form.Label>
-          <Form.Control
-            type="number"
-            min={0}
-            value={amountPaid}
-            onChange={(e) => setAmountPaid(e.target.value)}
-            style={formStyle}
-          />
-        </Form.Group>
-        <div style={{ marginTop: '1rem' }}>
-          <Button
-            variant="primary"
-            onClick={handleCheckout}
-            disabled={isCheckingOut}
-            className="me-2"
-          >
-            {isCheckingOut ? 'Placing order...' : 'Checkout'}
-          </Button>
-          <Button variant="outline-light" onClick={() => navigate('/catalogue')}>
-            Continue shopping
-          </Button>
-        </div>
+      <div style={{ fontSize: '1.1rem', marginBottom: '1.5rem' }}>
+        {/* <p style={{ marginBottom: '0.25rem' }}>
+          <strong>Total discount:</strong> {discountPct}% {discountAmount > 0 && `(₹${discountAmount.toFixed(2)})`}
+        </p> */}
+        <p style={{ marginBottom: 0, fontSize: '1.25rem' }}>
+          <strong>Total amount to pay:</strong> ₹{Math.max(0, totalToPay).toFixed(2)}
+        </p>
       </div>
+      <Button variant="primary" onClick={openCheckoutModal}>Checkout</Button>
+
+      <Modal show={showCheckoutModal} onHide={() => !submitting && setShowCheckoutModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Checkout – Your details</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleCheckoutSubmit}>
+          <Modal.Body>
+            <p className="text-muted small">We’ll send your cart and contact details to complete the order.</p>
+            <Form.Group className="mb-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+                placeholder="Your name"
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+                placeholder="Phone number"
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.address}
+                onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))}
+                placeholder="Address"
+                required
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowCheckoutModal(false)} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit" disabled={submitting}>
+              {submitting ? 'Sending...' : 'Send & complete checkout'}
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
       </div>
     </div>
   );

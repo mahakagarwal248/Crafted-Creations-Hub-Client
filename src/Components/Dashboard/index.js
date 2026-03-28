@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
 import AddExpenses from './AddExpenses';
@@ -26,6 +27,7 @@ const navLinkStyle = {
 };
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [activePage, setActivePage] = useState(PAGES.ORDERS);
   const [productsRefreshKey, setProductsRefreshKey] = useState(0);
   const [showAddProductForm, setShowAddProductForm] = useState(false);
@@ -34,6 +36,12 @@ function Dashboard() {
     <div style={{ display: 'flex', width: '100%', minHeight: 'calc(100vh - 60px)' }}>
       <aside style={sidebarStyle}>
         <Nav variant="pills" className="flex-column">
+          <Nav.Link
+            onClick={() => navigate('/')}
+            style={navLinkStyle}
+          >
+            Home
+          </Nav.Link>
           <Nav.Link
             active={activePage === PAGES.EXPENSES}
             onClick={() => setActivePage(PAGES.EXPENSES)}
