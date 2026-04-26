@@ -5,10 +5,13 @@ import { AuthProvider } from './context/AuthContext';
 import Layout from './Components/Layout';
 import Home from './Components/Home';
 import Catalogue from './Components/Catalogue';
+import ProductDetail from './Components/ProductDetail';
 import Cart from './Components/Cart';
+import MyOrders from './Components/MyOrders';
 import Dashboard from './Components/Dashboard';
 import Login from './Components/Login';
-import ProtectedRoute from './Components/ProtectedRoute';
+import Register from './Components/Register';
+import AdminRoute from './Components/AdminRoute';
 
 function App() {
   return (
@@ -20,10 +23,13 @@ function App() {
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/catalogue" element={<Catalogue />} />
+                <Route path="/product/:productId" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/my-orders" element={<MyOrders />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
               </Route>
-              <Route element={<ProtectedRoute />}>
+              <Route element={<AdminRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />

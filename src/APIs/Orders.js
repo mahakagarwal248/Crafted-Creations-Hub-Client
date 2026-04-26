@@ -45,6 +45,17 @@ export const getOrders = async() => {
     }
 }
 
+export const getOrdersForUser = async (userId) => {
+    try {
+        const response = await axios.get(`${API_DOMAIN}/orders/by-user/${encodeURIComponent(userId)}`);
+        if (!response) throw new Error("Something went wrong!");
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 export const updateOrderStatus = async (orderId, status) => {
     try {
         const response = await axios.patch(`${API_DOMAIN}/orders/${orderId}`, { status });

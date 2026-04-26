@@ -1,10 +1,9 @@
 import logo from '../logo.jpeg';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import { useOutletContext, useNavigate, useLocation } from 'react-router-dom';
+import { useOutletContext, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Catalogue.css';
 
 function ProductGrid({ data }) {
   const { addToCart } = useOutletContext() || {};
@@ -21,33 +20,60 @@ function ProductGrid({ data }) {
     addToCart?.({ productId: item.productId, name: item.name, price: item.price, quantity: 1 });
   };
 
+  if (!data?.length) {
+    return <p className="catalogue-empty">No products in the catalogue yet.</p>;
+  }
+
   return (
-    <Container>
+    <>
       {data.map((item) => (
-        <div key={item._id} style={{ marginBottom: '25px' }}>
-          <h2>{item._id} - {item.count}</h2>
-          <Row>
+        <section key={item._id} className="catalogue-category-block">
+          <div className="catalogue-category-head">
+            <h2 className="catalogue-category-title">{item._id}</h2>
+            <span className="catalogue-category-pill" aria-label={`${item.count} products`}>
+              {item.count} {item.count === 1 ? 'item' : 'items'}
+            </span>
+          </div>
+          <Row className="g-3 g-lg-4 catalogue-grid-row">
             {item.products.map((ele) => (
-              <Col xl={4} key={ele._id || ele.productId} style={{ marginBottom: '25px' }}>
-                <div style={{ border: '2px solid white', padding: '1rem' }}>
-                  <img alt="product" src={logo} style={{ height: '150px', width: '150px' }} />
-                  <h5>{ele.name}</h5>
-                  <h5>₹{ele.price}</h5>
-                  <p>Minimum days to dispatch: {ele.minDaysToDispatch ?? '—'}</p>
-                  <Button
-                    variant="outline-light"
-                    size="sm"
-                    onClick={() => handleAddToCart(ele)}
-                  >
-                    Add to cart
-                  </Button>
-                </div>
+              <Col sm={6} lg={4} key={ele._id || ele.productId}>
+                <article className="catalogue-card">
+                  <Link to={`/product/${ele.productId}`} className="catalogue-card-media">
+                    <img
+                      alt={ele.name || 'product'}
+                      src={(Array.isArray(ele.photos) && ele.photos[0]) || ele.imageUrl || logo}
+                    />
+                  </Link>
+                  <div className="catalogue-card-body">
+                    <Link to={`/product/${ele.productId}`} className="catalogue-card-title d-block">
+                      {ele.name}
+                    </Link>
+                    <p className="catalogue-card-price mb-0">₹{ele.price}</p>
+                    <p className="catalogue-card-dispatch mb-0">
+                      {ele.minDaysToDispatch != null
+                        ? `Minimum ${ele.minDaysToDispatch} day${ele.minDaysToDispatch === 1 ? '' : 's'} to dispatch`
+                        : 'Minimum days to dispatch: —'}
+                    </p>
+                    <div className="catalogue-card-actions">
+                      <Link to={`/product/${ele.productId}`} className="catalogue-btn-secondary">
+                        View details
+                      </Link>
+                      <button
+                        type="button"
+                        className="catalogue-btn-primary"
+                        onClick={() => handleAddToCart(ele)}
+                      >
+                        Add to cart
+                      </button>
+                    </div>
+                  </div>
+                </article>
               </Col>
             ))}
           </Row>
-        </div>
+        </section>
       ))}
-    </Container>
+    </>
   );
 }
 

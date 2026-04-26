@@ -72,18 +72,11 @@ function AddOrders() {
     }
   };
 
-  const formControlStyle = {
-    border: '1px solid #dee2e6',
-    padding: '6px 10px',
-    borderRadius: '6px',
-    width: '100%',
-  };
-
   return (
-    <div style={{ maxWidth: 720, margin: 'auto' }}>
-      <h3>Add Order</h3>
+    <div className="dashboard-panel" style={{ maxWidth: 800 }}>
+      <h3>Add order</h3>
 
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div className="mb-4">
         <h5 className="mb-3">Products</h5>
         <Table bordered size="sm">
           <thead>
@@ -102,7 +95,6 @@ function AddOrders() {
                     placeholder="Product Id"
                     value={row.productId}
                     onChange={(e) => setProductRow(index, 'productId', e.target.value)}
-                    style={formControlStyle}
                   />
                 </td>
                 <td>
@@ -112,13 +104,13 @@ function AddOrders() {
                     placeholder="Qty"
                     value={row.quantity || ''}
                     onChange={(e) => setProductRow(index, 'quantity', e.target.value)}
-                    style={formControlStyle}
                   />
                 </td>
                 <td>
                   <Button
                     variant="outline-danger"
                     size="sm"
+                    className="btn-dashboard-danger"
                     onClick={() => removeProductRow(index)}
                     disabled={productRows.length <= 1}
                   >
@@ -134,7 +126,7 @@ function AddOrders() {
         </Button>
       </div>
 
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div className="mb-4">
         <h5 className="mb-3">Order details</h5>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ minWidth: 200, flex: 1 }}>
@@ -144,7 +136,6 @@ function AddOrders() {
               placeholder="Customer Id"
               value={orderDetails.customerId}
               onChange={(e) => setOrderField('customerId', e.target.value)}
-              style={formControlStyle}
             />
           </div>
           <div style={{ minWidth: 120 }}>
@@ -155,7 +146,6 @@ function AddOrders() {
               placeholder="0"
               value={orderDetails.discount || ''}
               onChange={(e) => setOrderField('discount', e.target.value)}
-              style={formControlStyle}
             />
           </div>
           <div style={{ minWidth: 120 }}>
@@ -166,7 +156,6 @@ function AddOrders() {
               placeholder="0"
               value={orderDetails.amountPaid || ''}
               onChange={(e) => setOrderField('amountPaid', e.target.value)}
-              style={formControlStyle}
             />
           </div>
         </div>

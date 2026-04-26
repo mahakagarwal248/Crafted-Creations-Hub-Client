@@ -32,13 +32,39 @@ function AddExpenses() {
         }
     }
     return (
-        <div>
-            <h3>Add Expenses</h3> 
-            <div style={{ width: "80%", margin: "auto", display: "flex", justifyContent: "space-evenly"}}>
-                <input type="text" placeholder="Description" onChange={(e) => setValues("description", e.target.value)} style={{ border: '1px solid white', padding: "2px", borderRadius: "5px", height: "35px"}}/>
-                <input type="Number" placeholder="Amount" onChange={(e) => setValues("amount", e.target.value)} style={{ border: '1px solid white', padding: "2px", borderRadius: "5px", height: "35px"}}/>
-                <input type="text" placeholder="Spend At" onChange={(e) => setValues("paidAt", e.target.value)} style={{ border: '1px solid white', padding: "2px", borderRadius: "5px", height: "35px"}}/>
-                <Button variant="info" onClick={onSubmit}>Submit</Button>
+        <div className="dashboard-panel dashboard-panel--tight">
+            <h3>Add expense</h3>
+            <div className="dashboard-expense-row">
+                <div className="dashboard-expense-field">
+                    <label className="form-label">Description</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Description"
+                        onChange={(e) => setValues('description', e.target.value)}
+                    />
+                </div>
+                <div className="dashboard-expense-field" style={{ flex: '0 1 120px' }}>
+                    <label className="form-label">Amount</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Amount"
+                        onChange={(e) => setValues('amount', e.target.value)}
+                    />
+                </div>
+                <div className="dashboard-expense-field">
+                    <label className="form-label">Spend at</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="When / where"
+                        onChange={(e) => setValues('paidAt', e.target.value)}
+                    />
+                </div>
+                <Button variant="info" onClick={onSubmit}>
+                    Submit
+                </Button>
             </div>
         </div>
     )

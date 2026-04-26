@@ -72,11 +72,12 @@ function Orders() {
       label: 'Action',
       format: (_, row) =>
         row.status === COMPLETE_STATUS ? (
-          <span className="text-success">Complete</span>
+          <span className="dashboard-status-complete">Complete</span>
         ) : (
           <Button
             variant="success"
             size="sm"
+            className="btn-dashboard-success"
             onClick={() => handleMarkComplete(row._id)}
             disabled={updatingId === row._id}
           >
@@ -87,13 +88,15 @@ function Orders() {
   ];
 
   return (
-    <div>
-      <h4>All Orders</h4>
+    <div className="dashboard-panel" style={{ overflowX: 'auto' }}>
+      <h4>All orders</h4>
       <TableComp
         data={orders}
         columns={ordersColumns}
         keyField="_id"
-        emptyMessage="No Orders found!"
+        emptyMessage="No orders found."
+        className="dashboard-table table-borderless"
+        style={{ width: '100%', margin: 0 }}
       />
     </div>
   );

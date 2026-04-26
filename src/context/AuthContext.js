@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
 const AUTH_KEY = 'cch_user';
 
@@ -28,8 +28,10 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(AUTH_KEY);
   };
 
+  const isAdmin = useMemo(() => user?.role === 'admin', [user]);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isHydrated }}>
+    <AuthContext.Provider value={{ user, login, logout, isHydrated, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

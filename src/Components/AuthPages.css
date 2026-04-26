@@ -1,0 +1,89 @@
+.auth-shell {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 1.5rem 1.35rem 1.75rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+.auth-shell h2 {
+  color: #fafafa;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.auth-shell .form-label {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+}
+
+.auth-shell .form-control {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fafafa;
+}
+
+.auth-shell .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.auth-shell .form-control:focus {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(201, 169, 98, 0.45);
+  color: #fff;
+  box-shadow: 0 0 0 0.2rem rgba(201, 169, 98, 0.12);
+}
+
+.auth-shell a {
+  color: #e8d5a3;
+  text-decoration: none;
+}
+
+.auth-shell a:hover {
+  color: #f5ead1;
+  text-decoration: underline;
+}
+
+.auth-shell .alert-success {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: #bbf7d0;
+}
+
+.auth-shell .alert-danger {
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fecaca;
+}
+
+.auth-btn-submit {
+  margin-top: 0.25rem;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #c9a962 0%, #a68540 100%);
+  color: #1a150c !important;
+  box-shadow: 0 4px 14px rgba(201, 169, 98, 0.3);
+}
+
+.auth-btn-submit:hover {
+  color: #1a150c !important;
+  background: linear-gradient(135deg, #d4b56e 0%, #b6914a 100%);
+}
+
+.auth-btn-submit:disabled {
+  opacity: 0.65;
+}
+
+/* Password eye on dark inputs */
+.auth-shell .password-field .password-field-toggle {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.auth-shell .password-field .password-field-toggle:hover {
+  color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}

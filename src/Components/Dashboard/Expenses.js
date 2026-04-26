@@ -28,12 +28,14 @@ function Expenses() {
   };
 
   return (
-    <div>
-      <h4>All Expenses</h4>
+    <div className="dashboard-panel" style={{ overflowX: 'auto' }}>
+      <h4>All expenses</h4>
       <TableComp
         data={expenses}
         columns={expensesColumns}
-        emptyMessage="No Expenses found!"
+        emptyMessage="No expenses found."
+        className="dashboard-table table-borderless"
+        style={{ width: '100%', margin: 0 }}
       />
     </div>
   );

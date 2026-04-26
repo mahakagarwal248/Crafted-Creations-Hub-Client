@@ -1,0 +1,169 @@
+/* Home — hero aligned with catalogue dark / gold theme */
+
+.home-page {
+  min-height: 100vh;
+}
+
+.home-hero {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem 1rem 3.5rem;
+  overflow: hidden;
+}
+
+/* soft spotlight behind content */
+.home-hero::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 640px);
+  height: min(60vh, 420px);
+  background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(201, 169, 98, 0.14) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 34rem;
+}
+
+.home-hero-card {
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  padding: 2.25rem 1.75rem 2.5rem;
+  text-align: center;
+}
+
+@media (min-width: 480px) {
+  .home-hero-card {
+    padding: 2.75rem 2.5rem 3rem;
+  }
+}
+
+/* Logo: frame that matches the page (reduces hard black square edge) */
+.home-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.35rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(155deg, rgba(35, 35, 48, 0.95) 0%, rgba(18, 18, 24, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), 0 0 24px -8px rgba(201, 169, 98, 0.15);
+}
+
+.home-logo {
+  display: block;
+  width: min(200px, 70vw);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 0.6rem;
+}
+
+.home-kicker {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(201, 169, 98, 0.85);
+  margin: 0 0 0.5rem;
+}
+
+.home-title {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-size: clamp(1.5rem, 4.2vw, 1.95rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  color: #fafafa;
+  margin: 0 0 0.75rem;
+}
+
+.home-title-accent {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-weight: 600;
+  font-style: italic;
+  background: linear-gradient(120deg, #f0e6d2 0%, #c9a962 50%, #e8d5a3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline;
+}
+
+.home-subtitle {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 1.75rem;
+  max-width: 26rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.home-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 11rem;
+  padding: 0.62rem 1.5rem;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: #1a150c;
+  border: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #d4b56e 0%, #a68540 100%);
+  box-shadow: 0 4px 20px rgba(201, 169, 98, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.home-cta-primary:hover {
+  color: #1a150c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201, 169, 98, 0.45);
+  filter: brightness(1.05);
+}
+
+.home-cta-primary:focus-visible {
+  outline: 2px solid rgba(201, 169, 98, 0.8);
+  outline-offset: 3px;
+}
+
+.home-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.home-cta-ghost:hover {
+  color: #e8d5a3;
+  border-bottom-color: rgba(201, 169, 98, 0.45);
+}

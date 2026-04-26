@@ -1,0 +1,48 @@
+.navbar-app {
+  padding: 0.65rem 1.25rem;
+  gap: 0.25rem;
+}
+
+.navbar-app--light {
+  background: #fff;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.navbar-app--dark {
+  position: relative;
+  background: linear-gradient(180deg, #1a1a24 0%, #101018 100%);
+  border-bottom: 1px solid rgba(201, 169, 98, 0.18);
+  box-shadow: 0 1px 0 rgba(201, 169, 98, 0.12) inset, 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.navbar-app--dark::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.35) 20%, rgba(201, 169, 98, 0.35) 80%, transparent);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.navbar-app--dark .nav-link {
+  color: rgba(255, 255, 255, 0.82) !important;
+  font-weight: 500;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  border-radius: 0.35rem;
+  padding: 0.4rem 0.55rem !important;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.navbar-app--dark .nav-link:hover {
+  color: #e8d5a3 !important;
+  background: rgba(201, 169, 98, 0.08);
+}
+
+.navbar-app--light .nav-link {
+  font-weight: 500;
+}

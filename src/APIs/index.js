@@ -13,6 +13,17 @@ export const getProducts = async (category) => {
   }
 };
 
+export const getProductById = async (productId) => {
+  try {
+    const response = await axios.get(`${API_DOMAIN}/product/${encodeURIComponent(productId)}`);
+    if (!response?.data) throw new Error('Something went wrong!');
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const addProduct = async (data) => {
   try {
     const response = await axios.post(`${API_DOMAIN}/product`, data);

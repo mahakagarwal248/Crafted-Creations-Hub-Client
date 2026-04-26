@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
+import Navbar from '../Navbar';
+import '../Catalogue.css';
+import './Dashboard.css';
 import AddExpenses from './AddExpenses';
 import AddOrders from './AddOrders';
 import AddProducts from './AddProducts';
@@ -11,21 +14,6 @@ import Products from './Products';
 
 const PAGES = { EXPENSES: 'expenses', ORDERS: 'orders', PRODUCTS: 'products' };
 
-const sidebarStyle = {
-  width: 220,
-  minHeight: 'calc(100vh - 60px)',
-  padding: '1rem 0',
-  borderRight: '1px solid rgba(255,255,255,0.2)',
-  flexShrink: 0,
-};
-
-const navLinkStyle = {
-  padding: '0.75rem 1.25rem',
-  color: 'rgba(255,255,255,0.85)',
-  cursor: 'pointer',
-  borderLeft: '3px solid transparent',
-};
-
 function Dashboard() {
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState(PAGES.ORDERS);
@@ -33,72 +21,53 @@ function Dashboard() {
   const [showAddProductForm, setShowAddProductForm] = useState(false);
 
   return (
-    <div style={{ display: 'flex', width: '100%', minHeight: 'calc(100vh - 60px)' }}>
-      <aside style={sidebarStyle}>
-        <Nav variant="pills" className="flex-column">
-          <Nav.Link
-            onClick={() => navigate('/')}
-            style={navLinkStyle}
-          >
-            Home
-          </Nav.Link>
-          <Nav.Link
-            active={activePage === PAGES.EXPENSES}
-            onClick={() => setActivePage(PAGES.EXPENSES)}
-            style={{
-              ...navLinkStyle,
-              ...(activePage === PAGES.EXPENSES
-                ? { borderLeftColor: '#0d6efd', backgroundColor: 'rgba(13, 110, 253, 0.15)' }
-                : {}),
-            }}
-          >
-            Expenses
-          </Nav.Link>
-          <Nav.Link
-            active={activePage === PAGES.ORDERS}
-            onClick={() => setActivePage(PAGES.ORDERS)}
-            style={{
-              ...navLinkStyle,
-              ...(activePage === PAGES.ORDERS
-                ? { borderLeftColor: '#0d6efd', backgroundColor: 'rgba(13, 110, 253, 0.15)' }
-                : {}),
-            }}
-          >
-            Orders
-          </Nav.Link>
-          <Nav.Link
-            active={activePage === PAGES.PRODUCTS}
-            onClick={() => setActivePage(PAGES.PRODUCTS)}
-            style={{
-              ...navLinkStyle,
-              ...(activePage === PAGES.PRODUCTS
-                ? { borderLeftColor: '#0d6efd', backgroundColor: 'rgba(13, 110, 253, 0.15)' }
-                : {}),
-            }}
-          >
-            Products
-          </Nav.Link>
-        </Nav>
-      </aside>
-      <main style={{ flex: 1, padding: '1.5rem 2rem', overflow: 'auto' }}>
-        {activePage === PAGES.EXPENSES && (
-          <>
-            <AddExpenses />
-            <br />
-            <Expenses />
-          </>
-        )}
-        {activePage === PAGES.ORDERS && (
-          <>
-            <AddOrders />
-            <br />
-            <Orders />
-          </>
-        )}
-        {activePage === PAGES.PRODUCTS && (
-          <>
-            {showAddProductForm ? (
-              <>
+    <div
+      className="catalogue-page dashboard-page"
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
+      <Navbar />
+      <div className="dashboard-layout">
+        <aside className="dashboard-sidebar">
+          <Nav className="flex-column">
+            <Nav.Link className="dashboard-nav-link" onClick={() => navigate('/')}>
+              Home
+            </Nav.Link>
+            <Nav.Link
+              className={`dashboard-nav-link${activePage === PAGES.EXPENSES ? ' dashboard-nav-link--active' : ''}`}
+              onClick={() => setActivePage(PAGES.EXPENSES)}
+            >
+              Expenses
+            </Nav.Link>
+            <Nav.Link
+              className={`dashboard-nav-link${activePage === PAGES.ORDERS ? ' dashboard-nav-link--active' : ''}`}
+              onClick={() => setActivePage(PAGES.ORDERS)}
+            >
+              Orders
+            </Nav.Link>
+            <Nav.Link
+              className={`dashboard-nav-link${activePage === PAGES.PRODUCTS ? ' dashboard-nav-link--active' : ''}`}
+              onClick={() => setActivePage(PAGES.PRODUCTS)}
+            >
+              Products
+            </Nav.Link>
+          </Nav>
+        </aside>
+        <main className="dashboard-main catalogue-inner">
+          {activePage === PAGES.EXPENSES && (
+            <div className="dashboard-stack">
+              <AddExpenses />
+              <Expenses />
+            </div>
+          )}
+          {activePage === PAGES.ORDERS && (
+            <div className="dashboard-stack">
+              <AddOrders />
+              <Orders />
+            </div>
+          )}
+          {activePage === PAGES.PRODUCTS && (
+            <div className="dashboard-stack">
+              {showAddProductForm ? (
                 <AddProducts
                   onProductAdded={() => {
                     setProductsRefreshKey((k) => k + 1);
@@ -106,17 +75,16 @@ function Dashboard() {
                   }}
                   onCancel={() => setShowAddProductForm(false)}
                 />
-                <br />
-              </>
-            ) : (
-              <Button variant="primary" onClick={() => setShowAddProductForm(true)} className="mb-3">
-                Add Product
-              </Button>
-            )}
-            <Products key={productsRefreshKey} />
-          </>
-        )}
-      </main>
+              ) : (
+                <Button variant="primary" onClick={() => setShowAddProductForm(true)}>
+                  Add Product
+                </Button>
+              )}
+              <Products key={productsRefreshKey} />
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
