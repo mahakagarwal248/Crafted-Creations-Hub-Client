@@ -23,27 +23,29 @@ export const addExpenses = async(data) => {
     }
 }
 
-export const getExpenses = async(data) => {
-    try {
-        const response = await axios.get(`${API_DOMAIN}/orders/get-expenses`);
-        if(!response) throw new Error("Something went wrong!");
-        return response;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
+export const getExpenses = async ({ page = 1, limit = 10 } = {}) => {
+  try {
+    const response = await axios.get(
+      `${API_DOMAIN}/orders/get-expenses?page=${page}&limit=${limit}`
+    );
+    if (!response) throw new Error('Something went wrong!');
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
-export const getOrders = async() => {
-    try {
-        const response = await axios.get(`${API_DOMAIN}/orders`);
-        if(!response) throw new Error("Something went wrong!");
-        return response;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
+export const getOrders = async ({ page = 1, limit = 10 } = {}) => {
+  try {
+    const response = await axios.get(`${API_DOMAIN}/orders?page=${page}&limit=${limit}`);
+    if (!response) throw new Error('Something went wrong!');
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 export const getOrdersForUser = async (userId) => {
     try {

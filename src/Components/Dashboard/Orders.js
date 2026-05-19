@@ -1,35 +1,54 @@
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { getOrders, updateOrderStatus } from '../../APIs/Orders';
 import TableComp from '../Table';
+import DashboardPagination from './DashboardPagination';
 
 const COMPLETE_STATUS = 'DELIVERED';
+const PAGE_SIZE = 10;
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+
+  const fetchOrders = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await getOrders({ page, limit: PAGE_SIZE });
+      if (response?.status === 200) {
+        const data = response.data;
+        setOrders(data?.items || []);
+        setTotalPages(data?.totalPages ?? 1);
+        setTotalCount(data?.totalCount ?? 0);
+        if (data?.page) setPage(data.page);
+      } else {
+        window.alert(response);
+      }
+    } catch (err) {
+      window.alert(err?.response?.data?.message || err?.message || 'Failed to load orders.');
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [page]);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
-    const response = await getOrders();
-    if (response && response.status === 200) setOrders(response.data || []);
-    else window.alert(response);
-  };
+  }, [fetchOrders]);
 
   const handleMarkComplete = async (orderId) => {
     if (updatingId) return;
     setUpdatingId(orderId);
     try {
       const response = await updateOrderStatus(orderId, COMPLETE_STATUS);
-      if (response && response.status === 200 && response.data?.data) {
+      if (response?.status === 200 && response.data?.data) {
         const updatedOrder = response.data.data;
-        setOrders((prev) =>
-          prev.map((o) => (o._id === orderId ? updatedOrder : o))
-        );
+        setOrders((prev) => prev.map((o) => (o._id === orderId ? updatedOrder : o)));
       } else {
         window.alert(response?.data?.message || 'Failed to update status.');
       }
@@ -90,14 +109,27 @@ function Orders() {
   return (
     <div className="dashboard-panel" style={{ overflowX: 'auto' }}>
       <h4>All orders</h4>
-      <TableComp
-        data={orders}
-        columns={ordersColumns}
-        keyField="_id"
-        emptyMessage="No orders found."
-        className="dashboard-table table-borderless"
-        style={{ width: '100%', margin: 0 }}
-      />
+      {loading && !orders.length ? (
+        <p className="text-muted mb-0">Loading orders...</p>
+      ) : (
+        <>
+          <TableComp
+            data={orders}
+            columns={ordersColumns}
+            keyField="_id"
+            emptyMessage="No orders found."
+            className="dashboard-table table-borderless"
+            style={{ width: '100%', margin: 0 }}
+          />
+          <DashboardPagination
+            page={page}
+            totalPages={totalPages}
+            totalCount={totalCount}
+            disabled={loading}
+            onPageChange={setPage}
+          />
+        </>
+      )}
     </div>
   );
 }

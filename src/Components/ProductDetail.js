@@ -142,7 +142,11 @@ function ProductDetail() {
               <div className="product-detail-spec">
                 <div className="product-detail-spec-row">
                   <span className="product-detail-spec-label">Category</span>
-                  <span className="product-detail-spec-value">{product.category}</span>
+                  <span className="product-detail-spec-value">
+                    {Array.isArray(product.category) && product.category.length
+                      ? product.category.map((c) => c?.name || c).filter(Boolean).join(', ')
+                      : '—'}
+                  </span>
                 </div>
                 <div className="product-detail-spec-row">
                   <span className="product-detail-spec-label">Dispatch time</span>

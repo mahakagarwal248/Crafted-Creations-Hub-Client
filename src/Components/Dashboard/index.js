@@ -7,18 +7,20 @@ import '../Catalogue.css';
 import './Dashboard.css';
 import AddExpenses from './AddExpenses';
 import AddOrders from './AddOrders';
-import AddProducts from './AddProducts';
+import ProductForm from './ProductForm';
 import Expenses from './Expenses';
 import Orders from './Orders';
 import Products from './Products';
+import CategoriesPanel from './CategoriesPanel';
 
-const PAGES = { EXPENSES: 'expenses', ORDERS: 'orders', PRODUCTS: 'products' };
+const PAGES = { EXPENSES: 'expenses', ORDERS: 'orders', PRODUCTS: 'products', CATEGORIES: 'categories' };
 
 function Dashboard() {
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState(PAGES.ORDERS);
   const [productsRefreshKey, setProductsRefreshKey] = useState(0);
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
 
   return (
     <div
@@ -50,6 +52,12 @@ function Dashboard() {
             >
               Products
             </Nav.Link>
+            <Nav.Link
+              className={`dashboard-nav-link${activePage === PAGES.CATEGORIES ? ' dashboard-nav-link--active' : ''}`}
+              onClick={() => setActivePage(PAGES.CATEGORIES)}
+            >
+              Categories
+            </Nav.Link>
           </Nav>
         </aside>
         <main className="dashboard-main catalogue-inner">
@@ -67,22 +75,34 @@ function Dashboard() {
           )}
           {activePage === PAGES.PRODUCTS && (
             <div className="dashboard-stack">
-              {showAddProductForm ? (
-                <AddProducts
-                  onProductAdded={() => {
+              {showProductForm || editingProduct ? (
+                <ProductForm
+                  editing={editingProduct}
+                  onSaved={() => {
                     setProductsRefreshKey((k) => k + 1);
-                    setShowAddProductForm(false);
+                    setShowProductForm(false);
+                    setEditingProduct(null);
                   }}
-                  onCancel={() => setShowAddProductForm(false)}
+                  onCancel={() => {
+                    setShowProductForm(false);
+                    setEditingProduct(null);
+                  }}
                 />
               ) : (
-                <Button variant="primary" onClick={() => setShowAddProductForm(true)}>
+                <Button variant="primary" onClick={() => setShowProductForm(true)}>
                   Add Product
                 </Button>
               )}
-              <Products key={productsRefreshKey} />
+              <Products
+                key={productsRefreshKey}
+                onEdit={(product) => {
+                  setEditingProduct(product);
+                  setShowProductForm(false);
+                }}
+              />
             </div>
           )}
+          {activePage === PAGES.CATEGORIES && <CategoriesPanel />}
         </main>
       </div>
     </div>

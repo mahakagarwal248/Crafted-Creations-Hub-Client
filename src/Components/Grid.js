@@ -27,9 +27,9 @@ function ProductGrid({ data }) {
   return (
     <>
       {data.map((item) => (
-        <section key={item._id} className="catalogue-category-block">
+        <section key={String(item._id)} className="catalogue-category-block">
           <div className="catalogue-category-head">
-            <h2 className="catalogue-category-title">{item._id}</h2>
+            <h2 className="catalogue-category-title">{item.name || 'Uncategorized'}</h2>
             <span className="catalogue-category-pill" aria-label={`${item.count} products`}>
               {item.count} {item.count === 1 ? 'item' : 'items'}
             </span>
