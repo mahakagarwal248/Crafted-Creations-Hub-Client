@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Spinner from 'react-bootstrap/Spinner';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { getProducts } from '../APIs';
 import { getCategories } from '../APIs/categoryApi';
 import Navbar from './Navbar';
 import ProductGrid from './Grid';
+import { ProductCardSkeleton, Skeleton } from './Skeleton';
 import './Catalogue.css';
 
 function Catalogue() {
@@ -91,9 +93,19 @@ function Catalogue() {
             </p>
           </header>
           {filterBar}
-          <div className="catalogue-loading">
-            <Spinner animation="border" role="status" className="text-light" />
-          </div>
+          <section className="catalogue-category-block">
+            <div className="catalogue-category-head">
+              <Skeleton width="180px" height="1.4rem" />
+              <Skeleton width="60px" height="1.05rem" radius="999px" />
+            </div>
+            <Row className="g-3 g-lg-4 catalogue-grid-row">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Col sm={6} lg={4} key={i}>
+                  <ProductCardSkeleton />
+                </Col>
+              ))}
+            </Row>
+          </section>
         </Container>
       </div>
     );

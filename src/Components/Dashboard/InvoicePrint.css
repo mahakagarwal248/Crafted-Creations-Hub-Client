@@ -1,0 +1,174 @@
+.invoice-print-page {
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: #1a1a1f;
+}
+
+.invoice-print-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.invoice-print-status,
+.invoice-print-error {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 1rem;
+}
+
+.invoice-print-error {
+  color: #f5a5a5;
+}
+
+.invoice-print-sheet {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2.5rem 2.75rem;
+  background: #fff;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.invoice-print-header {
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.invoice-print-brand {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+.invoice-print-tagline {
+  font-weight: 700;
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+.invoice-print-contact {
+  text-align: left;
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+}
+
+.invoice-print-rule {
+  border: none;
+  border-top: 1px solid #222;
+  margin: 1rem 0 0.5rem;
+}
+
+.invoice-print-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.invoice-print-meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+}
+
+.invoice-print-billto h3,
+.invoice-print-notes h3 {
+  font-style: italic;
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.invoice-print-billto p {
+  margin: 0.2rem 0;
+}
+
+.invoice-print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.invoice-print-table th,
+.invoice-print-table td {
+  border: 1px solid #222;
+  padding: 0.45rem 0.5rem;
+}
+
+.invoice-print-table th {
+  background: #e8e8e8;
+  font-weight: 700;
+  text-align: center;
+}
+
+.invoice-print-table th:first-child,
+.invoice-print-table td:first-child {
+  text-align: left;
+  width: 50%;
+}
+
+.invoice-print-table th:not(:first-child),
+.invoice-print-table td:not(:first-child) {
+  text-align: center;
+  width: 16.66%;
+}
+
+.invoice-print-totals {
+  margin-top: 1.25rem;
+}
+
+.invoice-print-totals p {
+  margin: 0.35rem 0;
+}
+
+.invoice-print-notes ul {
+  margin: 0.35rem 0 0 1.25rem;
+  padding: 0;
+}
+
+.invoice-print-signature {
+  margin-top: 2.5rem;
+}
+
+.invoice-print-signature-line {
+  width: 200px;
+  border-bottom: 1px solid #222;
+  margin-top: 2.5rem;
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .no-print,
+  .invoice-print-toolbar,
+  .App-header nav,
+  header,
+  .navbar {
+    display: none !important;
+  }
+
+  .invoice-print-page {
+    padding: 0;
+    background: #fff;
+  }
+
+  .invoice-print-sheet {
+    box-shadow: none;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}

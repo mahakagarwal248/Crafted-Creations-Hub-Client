@@ -1,0 +1,129 @@
+.cch-skeleton {
+  display: inline-block;
+  vertical-align: middle;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.05) 18%,
+    rgba(255, 255, 255, 0.12) 38%,
+    rgba(255, 255, 255, 0.05) 60%
+  );
+  background-size: 200% 100%;
+  animation: cch-skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.4rem;
+}
+
+@keyframes cch-skeleton-shimmer {
+  0% {
+    background-position: -120% 0;
+  }
+  100% {
+    background-position: 120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cch-skeleton {
+    animation: none;
+    background: rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* Category tile (homepage) */
+.cch-skeleton-tile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.cch-skeleton-tile-media {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+}
+
+.cch-skeleton-tile-body {
+  padding: 0.85rem 0.9rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+/* Product card (catalogue) */
+.cch-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.cch-skeleton-card-media {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+  display: block;
+}
+
+.cch-skeleton-card-body {
+  padding: 0.85rem 0.95rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cch-skeleton-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+/* Review card (testimonial style with overlapping avatar) */
+.cch-skeleton-review {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.55rem;
+  padding: 3.25rem 1.25rem 1.4rem;
+  margin-top: 2.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cch-skeleton-review-avatar-wrap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cch-skeleton-review-text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.55rem;
+  background: rgba(0, 0, 0, 0.22);
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+/* Table row */
+.cch-skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cch-skeleton-row:last-child {
+  border-bottom: none;
+}

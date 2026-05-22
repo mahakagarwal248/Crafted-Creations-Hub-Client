@@ -1,21 +1,44 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner';
+import moment from 'moment';
 import logo from '../logo.jpeg';
 import { getFeaturedHomepageCategories } from '../APIs/categoryApi';
+import { getLatestReviews } from '../APIs/reviewApi';
 import Navbar from './Navbar';
+import { CategoryTileSkeleton, ReviewCardSkeleton } from './Skeleton';
 import './Catalogue.css';
 import './Home.css';
+
+function HomeStarRow({ value }) {
+  return (
+    <span className="home-review-stars">
+      {[1, 2, 3, 4, 5].map((s) => (
+        <span key={s} className={value >= s ? 'home-review-star--filled' : ''}>
+          ★
+        </span>
+      ))}
+    </span>
+  );
+}
 
 function Home() {
   const [featuredCategories, setFeaturedCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
 
   useEffect(() => {
     getFeaturedHomepageCategories()
       .then((data) => setFeaturedCategories(Array.isArray(data) ? data : []))
       .catch(() => setFeaturedCategories([]))
       .finally(() => setLoadingCategories(false));
+  }, []);
+
+  useEffect(() => {
+    getLatestReviews({ limit: 6, minRating: 4 })
+      .then((res) => setReviews(Array.isArray(res?.data?.data) ? res.data.data : []))
+      .catch(() => setReviews([]))
+      .finally(() => setLoadingReviews(false));
   }, []);
 
   return (
@@ -49,8 +72,10 @@ function Home() {
             <section className="home-featured" aria-label="Featured categories">
               <h2 className="home-featured-title">Shop by category</h2>
               {loadingCategories ? (
-                <div className="home-featured-loading">
-                  <Spinner animation="border" size="sm" className="text-light" />
+                <div className="home-featured-grid">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <CategoryTileSkeleton key={i} />
+                  ))}
                 </div>
               ) : (
                 <div className="home-featured-grid">
@@ -77,6 +102,66 @@ function Home() {
                       </div>
                     </Link>
                   ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {(loadingReviews || reviews.length > 0) && (
+            <section className="home-reviews" aria-label="Customer reviews">
+              <div className="home-reviews-head">
+                <h2 className="home-reviews-title">What customers are saying</h2>
+                <p className="home-reviews-sub">Real words from people who bought handmade with us.</p>
+              </div>
+              {loadingReviews ? (
+                <div className="home-reviews-grid">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <ReviewCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : (
+                <div className="home-reviews-grid">
+                  {reviews.map((r) => {
+                    const productThumb =
+                      (Array.isArray(r.product?.photos) && r.product.photos[0]) ||
+                      r.product?.imageUrl ||
+                      null;
+                    const productPath = r.product?.productId
+                      ? `/product/${r.product.productId}`
+                      : null;
+                    const avatarSrc = r.photoUrl || r.userAvatar;
+                    return (
+                      <article key={r._id} className="home-review-card">
+                        <div className="home-review-avatar-wrap">
+                          <img src={avatarSrc} alt="" className="home-review-avatar" />
+                        </div>
+                        <h3 className="home-review-name">{r.userName || 'Customer'}</h3>
+                        <span className="home-review-date">
+                          {r.createdAt ? moment(r.createdAt).format('DD MMM YYYY') : ''}
+                        </span>
+                        <HomeStarRow value={r.rating} />
+                        {r.comment && (
+                          <div className="home-review-text-wrap">
+                            <p className="home-review-text">{r.comment}</p>
+                          </div>
+                        )}
+                        {productPath && (
+                          <div className="home-review-thumbs">
+                            {productThumb ? (
+                              <Link to={productPath} className="home-review-product">
+                                <img src={productThumb} alt={r.product?.name || ''} />
+                                <span>{r.product?.name}</span>
+                              </Link>
+                            ) : (
+                              <Link to={productPath} className="home-review-product home-review-product--text">
+                                {r.product?.name}
+                              </Link>
+                            )}
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
                 </div>
               )}
             </section>

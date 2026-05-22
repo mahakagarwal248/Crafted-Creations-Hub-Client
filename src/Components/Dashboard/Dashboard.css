@@ -285,6 +285,13 @@
   color: #fff !important;
 }
 
+.dashboard-page .dashboard-order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .dashboard-page .dashboard-status-complete {
   color: #8fd9a8 !important;
   font-size: 0.88rem;

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
 import * as cartAPI from '../APIs/Cart';
 import { useAuth } from '../context/AuthContext';
+import Footer from './Footer';
 
 const defaultCart = { items: [] };
 
@@ -69,20 +70,23 @@ function Layout() {
   const totalAmount = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <Outlet
-      context={{
-        cart,
-        items,
-        totalItems,
-        totalAmount,
-        cartId,
-        addToCart,
-        updateQuantity,
-        removeFromCart,
-        clearCart,
-        refreshCart,
-      }}
-    />
+    <>
+      <Outlet
+        context={{
+          cart,
+          items,
+          totalItems,
+          totalAmount,
+          cartId,
+          addToCart,
+          updateQuantity,
+          removeFromCart,
+          clearCart,
+          refreshCart,
+        }}
+      />
+      <Footer />
+    </>
   );
 }
 

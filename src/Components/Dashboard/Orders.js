@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import { generateOrderInvoice } from '../../APIs/invoiceApi';
 import { getOrders, updateOrderStatus } from '../../APIs/Orders';
 import TableComp from '../Table';
 import DashboardPagination from './DashboardPagination';
@@ -9,12 +11,14 @@ const COMPLETE_STATUS = 'DELIVERED';
 const PAGE_SIZE = 10;
 
 function Orders() {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [invoiceActionId, setInvoiceActionId] = useState(null);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -59,6 +63,27 @@ function Orders() {
     }
   };
 
+  const handleGenerateInvoice = async (orderId) => {
+    if (invoiceActionId) return;
+    setInvoiceActionId(orderId);
+    try {
+      const response = await generateOrderInvoice(orderId);
+      if (response?.status === 201 || response?.status === 409) {
+        navigate(`/dashboard/invoice/${orderId}`);
+      } else {
+        window.alert(response?.data?.message || 'Could not generate invoice.');
+      }
+    } catch (err) {
+      if (err?.response?.status === 409) {
+        navigate(`/dashboard/invoice/${orderId}`);
+      } else {
+        window.alert(err?.response?.data?.message || err?.message || 'Failed to generate invoice.');
+      }
+    } finally {
+      setInvoiceActionId(null);
+    }
+  };
+
   const ordersColumns = [
     {
       key: 'items',
@@ -89,20 +114,41 @@ function Orders() {
     {
       key: 'action',
       label: 'Action',
-      format: (_, row) =>
-        row.status === COMPLETE_STATUS ? (
-          <span className="dashboard-status-complete">Complete</span>
-        ) : (
-          <Button
-            variant="success"
-            size="sm"
-            className="btn-dashboard-success"
-            onClick={() => handleMarkComplete(row._id)}
-            disabled={updatingId === row._id}
-          >
-            {updatingId === row._id ? 'Updating...' : 'Mark complete'}
-          </Button>
-        ),
+      format: (_, row) => (
+        <div className="dashboard-order-actions">
+          {row.hasInvoice || row.invoiceNumber ? (
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => navigate(`/dashboard/invoice/${row._id}`)}
+            >
+              View invoice
+            </Button>
+          ) : (
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => handleGenerateInvoice(row._id)}
+              disabled={invoiceActionId === row._id}
+            >
+              {invoiceActionId === row._id ? 'Generating...' : 'Generate invoice'}
+            </Button>
+          )}
+          {row.status === COMPLETE_STATUS ? (
+            <span className="dashboard-status-complete">Complete</span>
+          ) : (
+            <Button
+              variant="success"
+              size="sm"
+              className="btn-dashboard-success"
+              onClick={() => handleMarkComplete(row._id)}
+              disabled={updatingId === row._id}
+            >
+              {updatingId === row._id ? 'Updating...' : 'Mark complete'}
+            </Button>
+          )}
+        </div>
+      ),
     },
   ];
 

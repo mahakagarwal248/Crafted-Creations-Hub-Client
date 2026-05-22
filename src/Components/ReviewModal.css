@@ -1,0 +1,122 @@
+.review-modal-dialog .modal-content {
+  background: #16161d;
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+}
+
+.review-modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.25rem;
+}
+
+.review-modal-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.review-modal-body {
+  padding: 1.1rem 1.25rem 0.5rem;
+}
+
+.review-modal-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.85rem 1.25rem;
+}
+
+.review-modal-product {
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.review-modal-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.4rem;
+}
+
+.review-modal-stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.review-modal-star {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 1.7rem;
+  line-height: 1;
+  padding: 0.1rem 0.2rem;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.review-modal-star:hover {
+  transform: scale(1.05);
+}
+
+.review-modal-star--filled {
+  color: #f0c674;
+}
+
+.review-modal-body .form-control,
+.review-modal-body .form-control:focus {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.review-modal-body .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.review-modal-body .form-control[type='file']::file-selector-button {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.3rem 0.7rem;
+  margin-right: 0.6rem;
+  border-radius: 0.35rem;
+}
+
+.review-modal-hint {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.review-modal-error {
+  color: #fca5a5;
+  font-size: 0.88rem;
+}
+
+.review-modal-photo-preview {
+  margin-top: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.review-modal-photo-preview img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.review-modal-photo-remove {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8rem;
+  border-radius: 0.4rem;
+  padding: 0.3rem 0.65rem;
+}
+
+.review-modal-photo-remove:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
