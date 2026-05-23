@@ -62,6 +62,11 @@ function CategoriesPanel() {
       format: (value) => (value ? 'Yes' : 'No'),
     },
     {
+      key: 'isDynamicPriceCategory',
+      label: 'Dynamic price',
+      format: (value) => (value ? 'Yes' : 'No'),
+    },
+    {
       key: 'homepageOrder',
       label: 'Homepage',
       format: (value) => (value ? `#${value}` : '—'),

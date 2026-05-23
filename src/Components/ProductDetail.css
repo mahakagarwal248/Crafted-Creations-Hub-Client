@@ -113,6 +113,14 @@
   letter-spacing: -0.02em;
 }
 
+.product-detail-price-prefix {
+  font-size: 0.7em;
+  font-weight: 500;
+  color: rgba(232, 213, 163, 0.7);
+  letter-spacing: 0.02em;
+  margin-right: 0.25rem;
+}
+
 .product-detail-spec {
   display: grid;
   gap: 0.65rem;

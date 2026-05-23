@@ -5,7 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { getProducts } from '../APIs';
-import { getCategories } from '../APIs/categoryApi';
+import { downloadCategoryCataloguePdf, getCategories } from '../APIs/categoryApi';
+import { useAuth } from '../context/AuthContext';
 import Navbar from './Navbar';
 import ProductGrid from './Grid';
 import { ProductCardSkeleton, Skeleton } from './Skeleton';
@@ -17,12 +18,30 @@ function Catalogue() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [downloadingCatalogue, setDownloadingCatalogue] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
 
   const activeCategoryName = useMemo(() => {
     if (!categoryFilter) return null;
     const match = categories.find((c) => c._id === categoryFilter);
     return match?.name || null;
   }, [categories, categoryFilter]);
+
+  const handleDownloadCatalogue = async () => {
+    if (!categoryFilter || downloadingCatalogue) return;
+    setDownloadingCatalogue(true);
+    try {
+      const safeName = (activeCategoryName || 'category')
+        .replace(/[^a-zA-Z0-9-_]+/g, '_')
+        .replace(/^_+|_+$/g, '') || 'category';
+      await downloadCategoryCataloguePdf(categoryFilter, `catalogue-${safeName}.pdf`);
+    } catch (err) {
+      window.alert(err?.response?.data?.message || err?.message || 'Could not download catalogue.');
+    } finally {
+      setDownloadingCatalogue(false);
+    }
+  };
 
   useEffect(() => {
     getCategories()
@@ -77,6 +96,16 @@ function Catalogue() {
         <p className="catalogue-filter-active mb-0">
           Showing: <span>{activeCategoryName}</span>
         </p>
+      )}
+      {isAdmin && categoryFilter && (
+        <button
+          type="button"
+          className="catalogue-download-btn"
+          onClick={handleDownloadCatalogue}
+          disabled={downloadingCatalogue}
+        >
+          {downloadingCatalogue ? 'Preparing PDF…' : 'Download catalogue'}
+        </button>
       )}
     </div>
   );

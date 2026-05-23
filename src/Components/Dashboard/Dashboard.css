@@ -439,6 +439,79 @@
   flex-shrink: 0;
 }
 
+.dashboard-page .dashboard-category-entry {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.6rem;
+  padding: 0.85rem 0.95rem 0.25rem;
+  margin-bottom: 0.85rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dashboard-page .dashboard-category-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-page .dashboard-category-entry-title {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(232, 213, 163, 0.85);
+}
+
+.dashboard-page .dashboard-category-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.25rem;
+}
+
+.dashboard-page .dashboard-category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.dashboard-page .dashboard-category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 169, 98, 0.45);
+  background: rgba(201, 169, 98, 0.12);
+  color: #e8d5a3;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.dashboard-page .dashboard-category-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(220, 53, 69, 0.25);
+  color: #ffd5d9;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dashboard-page .dashboard-category-chip-remove:hover {
+  background: rgba(220, 53, 69, 0.55);
+  color: #fff;
+}
+
 .dashboard-page .dashboard-pagination {
   display: flex;
   flex-wrap: wrap;

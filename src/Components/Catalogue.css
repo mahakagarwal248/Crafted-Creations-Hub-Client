@@ -128,6 +128,30 @@
   font-weight: 600;
 }
 
+.catalogue-download-btn {
+  flex: 0 0 auto;
+  border: 1px solid rgba(201, 169, 98, 0.55);
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.18) 0%, rgba(166, 133, 64, 0.22) 100%);
+  color: #e8d5a3;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.catalogue-download-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.32) 0%, rgba(166, 133, 64, 0.38) 100%);
+  color: #f5ead0;
+}
+
+.catalogue-download-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 @media (min-width: 768px) {
   .catalogue-filter-bar {
     margin-bottom: 2rem;

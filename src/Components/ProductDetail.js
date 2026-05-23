@@ -48,6 +48,11 @@ function ProductDetail() {
     return [logo];
   }, [product]);
 
+  const hasDynamicPriceCategory = useMemo(() => {
+    if (!Array.isArray(product?.category)) return false;
+    return product.category.some((c) => c && typeof c === 'object' && c.isDynamicPriceCategory);
+  }, [product]);
+
   useEffect(() => {
     setActivePhotoIndex(0);
   }, [productId]);
@@ -227,7 +232,12 @@ function ProductDetail() {
               <h1 className="product-detail-title" style={{ textTransform: 'capitalize' }}>
                 {product.name}
               </h1>
-              <p className="product-detail-price">₹{product.price}</p>
+              <p className="product-detail-price">
+                {hasDynamicPriceCategory && (
+                  <span className="product-detail-price-prefix">Starting from </span>
+                )}
+                ₹{product.price}
+              </p>
               <div className="product-detail-spec">
                 <div className="product-detail-spec-row">
                   <span className="product-detail-spec-label">Category</span>

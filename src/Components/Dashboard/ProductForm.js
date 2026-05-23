@@ -33,7 +33,7 @@ function categoryIdsFromProduct(product) {
 function ProductForm({ editing, onSaved, onCancel }) {
   const [product, setProduct] = useState(initialProduct);
   const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [existingPhotos, setExistingPhotos] = useState([]);
   const [newPhotoDataUrls, setNewPhotoDataUrls] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,19 +54,36 @@ function ProductForm({ editing, onSaved, onCancel }) {
         minDaysToDispatch:
           editing.minDaysToDispatch != null ? String(editing.minDaysToDispatch) : '',
       });
-      const ids = categoryIdsFromProduct(editing);
-      setSelectedCategoryId(ids[0] || '');
+      setSelectedCategoryIds(categoryIdsFromProduct(editing));
       setExistingPhotos(Array.isArray(editing.photos) ? [...editing.photos] : []);
       setNewPhotoDataUrls([]);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } else {
       setProduct(initialProduct);
-      setSelectedCategoryId('');
+      setSelectedCategoryIds([]);
       setExistingPhotos([]);
       setNewPhotoDataUrls([]);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   }, [editing]);
+
+  const addCategoryId = (id) => {
+    if (!id) return;
+    setSelectedCategoryIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  };
+
+  const removeCategoryId = (id) => {
+    setSelectedCategoryIds((prev) => prev.filter((cid) => cid !== id));
+  };
+
+  const getCategoryName = (id) => {
+    const found = categories.find((c) => String(c._id) === String(id));
+    return found?.name || 'Unknown';
+  };
+
+  const availableCategories = categories.filter(
+    (c) => !selectedCategoryIds.includes(String(c._id)),
+  );
 
   const setField = (field, value) => {
     setProduct((prev) => ({ ...prev, [field]: value }));
@@ -113,8 +130,8 @@ function ProductForm({ editing, onSaved, onCancel }) {
     const name = product.name?.trim();
     const price = Number(product.price);
     const minDaysToDispatch = Number(product.minDaysToDispatch);
-    if (!name || !selectedCategoryId || !price || isNaN(price) || price < 0) {
-      window.alert('Name, category, and price are required. Price must be ≥ 0.');
+    if (!name || selectedCategoryIds.length === 0 || !price || isNaN(price) || price < 0) {
+      window.alert('Name, at least one category, and price are required. Price must be ≥ 0.');
       return;
     }
     if (isNaN(minDaysToDispatch) || minDaysToDispatch < 0) {
@@ -130,7 +147,7 @@ function ProductForm({ editing, onSaved, onCancel }) {
     const payload = {
       name,
       description: product.description?.trim() || undefined,
-      category: [selectedCategoryId],
+      category: selectedCategoryIds,
       price,
       minDaysToDispatch,
       photos: allPhotos,
@@ -148,7 +165,7 @@ function ProductForm({ editing, onSaved, onCancel }) {
         window.alert(editing ? 'Product updated successfully!' : 'Product added successfully!');
         if (!editing) {
           setProduct(initialProduct);
-          setSelectedCategoryId('');
+          setSelectedCategoryIds([]);
           setExistingPhotos([]);
           setNewPhotoDataUrls([]);
           if (fileInputRef.current) fileInputRef.current.value = '';
@@ -190,24 +207,55 @@ function ProductForm({ editing, onSaved, onCancel }) {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Category *</Form.Label>
+          <Form.Label>Categories *</Form.Label>
           {categories.length === 0 ? (
             <Form.Text className="text-muted d-block">
               No categories yet. Add categories from the Categories tab first.
             </Form.Text>
           ) : (
-            <Form.Select
-              value={selectedCategoryId}
-              onChange={(e) => setSelectedCategoryId(e.target.value)}
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
+            <>
+              {selectedCategoryIds.length > 0 && (
+                <div className="dashboard-category-chips mb-2">
+                  {selectedCategoryIds.map((id) => (
+                    <span key={id} className="dashboard-category-chip">
+                      {getCategoryName(id)}
+                      <button
+                        type="button"
+                        className="dashboard-category-chip-remove"
+                        onClick={() => removeCategoryId(id)}
+                        aria-label={`Remove ${getCategoryName(id)}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <Form.Select
+                value=""
+                onChange={(e) => {
+                  addCategoryId(e.target.value);
+                  e.target.value = '';
+                }}
+                disabled={availableCategories.length === 0}
+              >
+                <option value="">
+                  {availableCategories.length === 0
+                    ? 'All categories selected'
+                    : selectedCategoryIds.length === 0
+                    ? 'Select a category'
+                    : 'Add another category'}
                 </option>
-              ))}
-            </Form.Select>
+                {availableCategories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Text className="text-muted">
+                Pick one or more categories. Click × on a chip to remove it.
+              </Form.Text>
+            </>
           )}
         </Form.Group>
         <Form.Group className="mb-3">
