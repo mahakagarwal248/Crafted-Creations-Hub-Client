@@ -598,3 +598,261 @@
   background: rgba(201, 169, 98, 0.3);
   color: #f5ead0 !important;
 }
+
+/* ───────────────────────── Responsive (mobile / tablet) ───────────────────────── */
+
+/* Tablet & smaller: collapse sidebar into a horizontal tab strip above main */
+@media (max-width: 767.98px) {
+  .dashboard-page .dashboard-layout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .dashboard-page .dashboard-sidebar {
+    width: 100%;
+    align-self: auto;
+    padding: 0.45rem 0.5rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-page .dashboard-sidebar .nav.flex-column {
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    min-width: max-content;
+  }
+
+  .dashboard-page .dashboard-nav-link {
+    margin: 0;
+    padding: 0.45rem 0.85rem;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0.4rem;
+    white-space: nowrap;
+    font-size: 0.88rem;
+  }
+
+  .dashboard-page .dashboard-nav-link--active {
+    border-left-color: transparent !important;
+    border-bottom-color: #c9a962 !important;
+    border-radius: 0.4rem;
+  }
+
+  .dashboard-page .dashboard-main {
+    padding: 1rem 0.85rem 1.75rem;
+  }
+
+  .dashboard-page .dashboard-panel {
+    padding: 0.95rem 0.85rem 1rem;
+    border-radius: 0.85rem;
+  }
+
+  .dashboard-page .dashboard-panel--tight {
+    padding: 0.75rem 0.8rem;
+  }
+
+  .dashboard-page .dashboard-panel h3 {
+    font-size: 1.05rem;
+  }
+
+  .dashboard-page .dashboard-panel h4 {
+    font-size: 0.95rem;
+  }
+
+  /* Toolbar wraps with full-width filter */
+  .dashboard-page .dashboard-products-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .dashboard-page .dashboard-products-toolbar h4 {
+    text-align: left;
+  }
+
+  .dashboard-page .dashboard-products-filter {
+    width: 100%;
+  }
+
+  .dashboard-page .dashboard-products-filter .catalogue-filter-select {
+    width: 100%;
+    min-width: 0 !important;
+  }
+
+  /* Generic tables (e.g. AddOrders): tighten cells */
+  .dashboard-page .dashboard-main .table {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page .dashboard-main .table thead th,
+  .dashboard-page .dashboard-main .table tbody td {
+    padding: 0.5rem 0.55rem;
+  }
+
+  .dashboard-page .dashboard-main .table thead th {
+    font-size: 0.66rem;
+  }
+
+  .dashboard-page .dashboard-thumb {
+    max-width: 56px;
+    max-height: 56px;
+  }
+
+  /* Dashboard data tables (Orders, Products): convert rows to cards */
+  .dashboard-page .dashboard-panel {
+    overflow-x: visible !important;
+  }
+
+  .dashboard-page .dashboard-panel .table-responsive {
+    overflow-x: visible !important;
+  }
+
+  .dashboard-page .dashboard-table thead {
+    display: none;
+  }
+
+  .dashboard-page .dashboard-table,
+  .dashboard-page .dashboard-table tbody,
+  .dashboard-page .dashboard-table tr,
+  .dashboard-page .dashboard-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-page .dashboard-table tbody tr {
+    padding: 0.8rem 0.85rem;
+    margin-bottom: 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .dashboard-page .dashboard-table tbody tr:hover td {
+    background: transparent !important;
+  }
+
+  .dashboard-page .dashboard-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .dashboard-page .dashboard-table tbody td {
+    border: none !important;
+    padding: 0.35rem 0 !important;
+    display: grid;
+    grid-template-columns: minmax(0, 7rem) 1fr;
+    gap: 0.65rem;
+    align-items: start;
+    font-size: 0.88rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .dashboard-page .dashboard-table tbody td::before {
+    content: attr(data-label);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+  }
+
+  .dashboard-page .dashboard-table tbody td[colspan] {
+    display: block !important;
+    padding: 1.25rem 0 !important;
+    text-align: center;
+  }
+
+  .dashboard-page .dashboard-table tbody td[colspan]::before {
+    content: none;
+  }
+
+  /* Featured slots: smaller tiles, scrollable pool */
+  .dashboard-page .dashboard-featured-slots {
+    grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .dashboard-page .dashboard-featured-slot {
+    min-height: 78px;
+    padding: 0.4rem;
+  }
+
+  .dashboard-page .dashboard-featured-pool {
+    padding: 0.5rem;
+  }
+
+  /* Pagination wraps cleanly */
+  .dashboard-page .dashboard-pagination {
+    gap: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page .dashboard-pagination-info {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  /* Expense form fields stack to full width */
+  .dashboard-page .dashboard-expense-field {
+    flex: 1 1 100%;
+  }
+
+  /* Order action buttons wrap and stay compact */
+  .dashboard-page .dashboard-order-actions {
+    gap: 0.35rem;
+  }
+
+  .dashboard-page .dashboard-order-actions .btn {
+    font-size: 0.78rem;
+    padding: 0.32rem 0.6rem;
+  }
+
+  /* Category entry chips & headers wrap nicely */
+  .dashboard-page .dashboard-category-entry {
+    padding: 0.7rem 0.75rem 0.25rem;
+  }
+
+  .dashboard-page .dashboard-category-entry-header {
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+  }
+}
+
+/* Phones: extra-tight spacing & inputs that don't trigger iOS zoom */
+@media (max-width: 480px) {
+  .dashboard-page .dashboard-main {
+    padding: 0.85rem 0.65rem 1.5rem;
+  }
+
+  .dashboard-page .dashboard-panel {
+    padding: 0.85rem 0.7rem 0.95rem;
+  }
+
+  .dashboard-page .dashboard-main .form-control,
+  .dashboard-page .dashboard-main .form-select {
+    font-size: 16px; /* prevents iOS zoom-on-focus */
+    padding: 0.5rem 0.65rem;
+  }
+
+  .dashboard-page .dashboard-nav-link {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page .btn-dashboard-primary,
+  .dashboard-page .btn-dashboard-ghost,
+  .dashboard-page .btn-dashboard-danger,
+  .dashboard-page .btn-dashboard-success,
+  .dashboard-page .dashboard-main .btn-primary {
+    font-size: 0.85rem;
+    padding: 0.42rem 0.85rem;
+  }
+
+  .dashboard-page .dashboard-featured-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

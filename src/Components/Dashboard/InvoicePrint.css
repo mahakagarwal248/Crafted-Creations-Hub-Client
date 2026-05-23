@@ -143,6 +143,53 @@
   margin-top: 2.5rem;
 }
 
+@media (max-width: 575.98px) {
+  .invoice-print-page {
+    padding: 0.85rem 0.5rem;
+  }
+
+  .invoice-print-sheet {
+    padding: 1.25rem 1rem;
+    border-radius: 0.65rem;
+    font-size: 13px;
+  }
+
+  .invoice-print-brand {
+    font-size: 1.35rem;
+  }
+
+  .invoice-print-tagline {
+    font-size: 0.85rem;
+  }
+
+  .invoice-print-title {
+    font-size: 1.2rem;
+  }
+
+  .invoice-print-meta-row {
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+  }
+
+  .invoice-print-table {
+    font-size: 0.78rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  .invoice-print-table th,
+  .invoice-print-table td {
+    padding: 0.35rem 0.4rem;
+  }
+
+  .invoice-print-toolbar .btn {
+    flex: 1 1 auto;
+  }
+}
+
 @media print {
   @page {
     margin: 12mm;

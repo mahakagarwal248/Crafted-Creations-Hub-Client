@@ -234,3 +234,144 @@
 .cart-modal-btn-submit:disabled {
   opacity: 0.65;
 }
+
+/* ───────── Mobile: convert table rows to stacked cards ───────── */
+@media (max-width: 575.98px) {
+  .cart-shell {
+    padding: 0.85rem 0.85rem 1rem;
+    border-radius: 1rem;
+    overflow-x: visible;
+  }
+
+  .cart-table {
+    margin: 0 !important;
+  }
+
+  .cart-table thead {
+    display: none;
+  }
+
+  .cart-table,
+  .cart-table tbody,
+  .cart-table tr,
+  .cart-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .cart-table tbody tr {
+    padding: 0.85rem 0.9rem;
+    margin-bottom: 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 0.65rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .cart-table tbody tr:hover td {
+    background: transparent !important;
+  }
+
+  .cart-table tbody td {
+    border: none !important;
+    padding: 0.3rem 0 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+  }
+
+  .cart-table tbody td::before {
+    content: attr(data-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.45);
+    flex-shrink: 0;
+  }
+
+  /* Per-cell labels keyed by their order in the cart row */
+  .cart-table tbody td:nth-child(1) {
+    font-weight: 600;
+    color: #fafafa;
+    padding-top: 0 !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    margin-bottom: 0.35rem;
+  }
+
+  .cart-table tbody td:nth-child(1)::before {
+    content: 'Item';
+  }
+
+  .cart-table tbody td:nth-child(2)::before {
+    content: 'Price';
+  }
+
+  .cart-table tbody td:nth-child(3)::before {
+    content: 'Qty';
+  }
+
+  .cart-table tbody td:nth-child(4) {
+    color: #e8d5a3;
+    font-weight: 600;
+  }
+
+  .cart-table tbody td:nth-child(4)::before {
+    content: 'Subtotal';
+  }
+
+  .cart-table tbody td:nth-child(5) {
+    justify-content: flex-end;
+    padding-top: 0.55rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+    margin-top: 0.35rem;
+  }
+
+  .cart-table tbody td:nth-child(5)::before {
+    content: '';
+  }
+
+  .cart-qty-input {
+    width: 88px !important;
+    margin: 0 !important;
+  }
+
+  .cart-btn-checkout {
+    width: 100%;
+    padding: 0.65rem 1rem;
+  }
+
+  .cart-total-strip {
+    margin-top: 0.85rem;
+    padding: 0.85rem 0.95rem;
+  }
+
+  .cart-total-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet: keep table but tighten paddings */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .cart-shell {
+    padding: 0.95rem 1rem 1.1rem;
+  }
+
+  .cart-table thead th,
+  .cart-table tbody td {
+    padding: 0.45rem 0.5rem;
+  }
+
+  .cart-qty-input {
+    width: 64px !important;
+  }
+}
+
+/* Checkout modal: prevent iOS zoom on focus */
+@media (max-width: 480px) {
+  .cart-checkout-modal-content .form-control {
+    font-size: 16px;
+  }
+}

@@ -32,7 +32,11 @@ function TableComp({ data, columns = [], keyField, emptyMessage = 'No data to di
               {columns.map((col) => {
                 const value = item[col.key];
                 const display = typeof col.format === 'function' ? col.format(value, item) : value;
-                return <td key={col.key}>{display}</td>;
+                return (
+                  <td key={col.key} data-label={col.label}>
+                    {display}
+                  </td>
+                );
               })}
             </tr>
           ))

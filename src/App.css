@@ -2,10 +2,15 @@
   text-align: center;
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden;
   background-color: black;
   color: white;
 }
 .App-logo{
   height: 250px;
   width: 250px;
+}
+
+img {
+  max-width: 100%;
 }

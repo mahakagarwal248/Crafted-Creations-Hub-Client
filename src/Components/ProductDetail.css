@@ -331,3 +331,82 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ───────── Mobile product detail ───────── */
+@media (max-width: 575.98px) {
+  .product-detail-shell {
+    padding: 1.1rem 0.85rem 1.4rem;
+    border-radius: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .product-detail-back {
+    margin-bottom: 0.9rem;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .product-detail-media {
+    padding: 0.6rem;
+    min-height: 220px;
+    max-height: 60vh;
+    border-radius: 0.85rem;
+  }
+
+  .product-detail-media img {
+    max-height: 52vh;
+  }
+
+  .product-detail-thumb {
+    width: 56px;
+    height: 56px;
+  }
+
+  .product-detail-title {
+    margin-bottom: 0.55rem;
+  }
+
+  .product-detail-price {
+    margin-bottom: 1.1rem;
+  }
+
+  .product-detail-spec {
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .product-detail-spec-row {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .product-detail-spec-label,
+  .product-detail-spec-value {
+    font-size: 0.85rem;
+  }
+
+  .product-detail-cta {
+    width: 100%;
+    padding: 0.7rem 1rem;
+  }
+
+  .product-detail-desc-body {
+    font-size: 0.92rem;
+  }
+
+  .product-detail-reviews {
+    margin-top: 1.85rem;
+    padding-top: 1.35rem;
+  }
+
+  /* Single-column review cards, with extra top space for the floating avatar */
+  .product-detail-review-list {
+    grid-template-columns: 1fr;
+    gap: 3.25rem 0;
+    padding-top: 2.5rem;
+  }
+
+  .product-detail-review {
+    padding: 3rem 1rem 1.2rem;
+  }
+}

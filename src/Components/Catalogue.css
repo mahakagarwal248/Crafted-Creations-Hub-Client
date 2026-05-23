@@ -400,3 +400,84 @@
   color: #c9a962 !important;
   border-color: currentColor rgba(0, 0, 0, 0.1) currentColor currentColor;
 }
+
+/* ───────── Mobile catalogue ───────── */
+@media (max-width: 575.98px) {
+  .catalogue-body,
+  .catalogue-inner {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .catalogue-page-header {
+    margin-bottom: 1.4rem;
+    padding-top: 0.25rem;
+  }
+
+  .catalogue-page-lede {
+    font-size: 0.88rem;
+  }
+
+  .catalogue-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    padding: 0.75rem 0.85rem;
+    margin: 0 auto 1.4rem;
+  }
+
+  .catalogue-filter-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .catalogue-filter-select {
+    width: 100%;
+    font-size: 16px; /* prevents iOS zoom */
+  }
+
+  .catalogue-filter-active {
+    text-align: center;
+    flex: 1 1 100%;
+  }
+
+  .catalogue-download-btn {
+    width: 100%;
+  }
+
+  .catalogue-category-block {
+    margin-bottom: 1.65rem;
+  }
+
+  .catalogue-category-head {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .catalogue-category-title {
+    font-size: 1.15rem;
+  }
+
+  .catalogue-card-body {
+    padding: 0.65rem 0.75rem 0.8rem;
+  }
+
+  .catalogue-card-title {
+    font-size: 0.9rem;
+  }
+
+  .catalogue-card-price {
+    font-size: 0.9rem;
+  }
+
+  .catalogue-card-dispatch {
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .catalogue-btn-primary,
+  .catalogue-btn-secondary {
+    font-size: 0.72rem;
+    padding: 0.42rem 0.45rem;
+  }
+}
