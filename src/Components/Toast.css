@@ -1,0 +1,114 @@
+.cch-toast-stack {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+  max-width: min(22rem, calc(100vw - 2rem));
+}
+
+.cch-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem 0.7rem 0.75rem;
+  border-radius: 0.65rem;
+  background: linear-gradient(180deg, #1c1c26 0%, #14141c 100%);
+  color: #fafafa;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  animation: cch-toast-in 0.18s ease-out;
+}
+
+@keyframes cch-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cch-toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.cch-toast--success {
+  background: linear-gradient(180deg, #1f8a4c 0%, #166c3a 100%);
+  border-color: rgba(134, 239, 172, 0.45);
+  color: #ffffff;
+  box-shadow: 0 14px 36px rgba(22, 108, 58, 0.4);
+}
+
+.cch-toast--success .cch-toast-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.cch-toast--success .cch-toast-close {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cch-toast--success .cch-toast-close:hover {
+  color: #ffffff;
+}
+
+.cch-toast--error {
+  border-color: rgba(248, 113, 113, 0.4);
+}
+
+.cch-toast--error .cch-toast-icon {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fca5a5;
+}
+
+.cch-toast-message {
+  flex: 1;
+  min-width: 0;
+}
+
+.cch-toast-close {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.15rem;
+  line-height: 1;
+  padding: 0 0.15rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cch-toast-close:hover {
+  color: #fff;
+}
+
+@media (max-width: 575.98px) {
+  .cch-toast-stack {
+    top: 0.65rem;
+    right: 0.65rem;
+    left: 0.65rem;
+    max-width: none;
+  }
+
+  .cch-toast {
+    font-size: 0.88rem;
+    padding: 0.65rem 0.75rem;
+  }
+}

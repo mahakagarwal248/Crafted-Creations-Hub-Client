@@ -6,10 +6,16 @@ import { useAuth } from '../context/AuthContext';
 import './Catalogue.css';
 
 function ProductGrid({ data }) {
-  const { addToCart } = useOutletContext() || {};
+  const outlet = useOutletContext() || {};
+  const { addToCart, updateQuantity, removeFromCart, items = [] } = outlet;
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const cartByProductId = items.reduce((acc, it) => {
+    acc[String(it.productId)] = it;
+    return acc;
+  }, {});
 
   const handleAddToCart = (item) => {
     if (!user) {
@@ -18,6 +24,18 @@ function ProductGrid({ data }) {
       return;
     }
     addToCart?.({ productId: item.productId, name: item.name, price: item.price, quantity: 1 });
+  };
+
+  const handleIncrement = (cartItem) => {
+    updateQuantity?.(cartItem.productId, cartItem.quantity + 1);
+  };
+
+  const handleDecrement = (cartItem) => {
+    if (cartItem.quantity <= 1) {
+      removeFromCart?.(cartItem.productId);
+      return;
+    }
+    updateQuantity?.(cartItem.productId, cartItem.quantity - 1);
   };
 
   if (!data?.length) {
@@ -58,14 +76,52 @@ function ProductGrid({ data }) {
                       <Link to={`/product/${ele.productId}`} className="catalogue-btn-secondary">
                         View details
                       </Link>
-                      <button
-                        type="button"
-                        className="catalogue-btn-primary"
-                        onClick={() => handleAddToCart(ele)}
-                      >
-                        Add to cart
-                      </button>
+                      {(() => {
+                        const inCart = cartByProductId[String(ele.productId)];
+                        if (inCart) {
+                          return (
+                            <div className="catalogue-qty-stepper" aria-label="Adjust quantity">
+                              <button
+                                type="button"
+                                className="catalogue-qty-btn"
+                                onClick={() => handleDecrement(inCart)}
+                                aria-label={inCart.quantity <= 1 ? 'Remove from cart' : 'Decrease quantity'}
+                              >
+                                −
+                              </button>
+                              <span className="catalogue-qty-value" aria-live="polite">
+                                {inCart.quantity}
+                              </span>
+                              <button
+                                type="button"
+                                className="catalogue-qty-btn"
+                                onClick={() => handleIncrement(inCart)}
+                                aria-label="Increase quantity"
+                              >
+                                +
+                              </button>
+                            </div>
+                          );
+                        }
+                        return (
+                          <button
+                            type="button"
+                            className="catalogue-btn-primary"
+                            onClick={() => handleAddToCart(ele)}
+                          >
+                            Add to cart
+                          </button>
+                        );
+                      })()}
                     </div>
+                    {cartByProductId[String(ele.productId)] && (
+                      <div className="catalogue-card-cart-footer">
+                        <span className="catalogue-card-in-cart">Already in cart</span>
+                        <Link to="/cart" className="catalogue-card-view-cart">
+                          View cart →
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </article>
               </Col>

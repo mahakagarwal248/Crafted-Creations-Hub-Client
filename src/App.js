@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './APIs/axiosClient';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './Components/Layout';
+import ScrollToTop from './Components/ScrollToTop';
 import Home from './Components/Home';
 import Catalogue from './Components/Catalogue';
 import ProductDetail from './Components/ProductDetail';
@@ -21,6 +22,7 @@ function App() {
       <header className="App-header">
         <AuthProvider>
           <Router>
+            <ScrollToTop />
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />

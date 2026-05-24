@@ -30,7 +30,8 @@ function ProductDetail() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { addToCart } = useOutletContext() || {};
+  const outlet = useOutletContext() || {};
+  const { addToCart, updateQuantity, removeFromCart, items = [] } = outlet;
   const { user } = useAuth();
 
   const [product, setProduct] = useState(null);
@@ -118,6 +119,14 @@ function ProductDetail() {
 
   const mainSrc = gallery[Math.min(activePhotoIndex, gallery.length - 1)];
 
+  const cartItem = useMemo(
+    () =>
+      product?.productId != null
+        ? items.find((it) => String(it.productId) === String(product.productId))
+        : null,
+    [items, product?.productId]
+  );
+
   const handleAddToCart = () => {
     if (!product) return;
     if (!user) {
@@ -131,6 +140,20 @@ function ProductDetail() {
       price: product.price,
       quantity: 1,
     });
+  };
+
+  const handleIncrement = () => {
+    if (!cartItem) return;
+    updateQuantity?.(cartItem.productId, cartItem.quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    if (!cartItem) return;
+    if (cartItem.quantity <= 1) {
+      removeFromCart?.(cartItem.productId);
+      return;
+    }
+    updateQuantity?.(cartItem.productId, cartItem.quantity - 1);
   };
 
   if (loading) {
@@ -260,9 +283,39 @@ function ProductDetail() {
                   <p className="product-detail-desc-body mb-0">{product.description}</p>
                 </div>
               ) : null}
-              <button type="button" className="btn product-detail-cta" onClick={handleAddToCart}>
-                Add to cart
-              </button>
+              {cartItem ? (
+                <div className="product-detail-cart-block">
+                  <p className="product-detail-in-cart">Already in cart</p>
+                  <div className="product-detail-qty-stepper" aria-label="Adjust quantity">
+                    <button
+                      type="button"
+                      className="product-detail-qty-btn"
+                      onClick={handleDecrement}
+                      aria-label={cartItem.quantity <= 1 ? 'Remove from cart' : 'Decrease quantity'}
+                    >
+                      −
+                    </button>
+                    <span className="product-detail-qty-value" aria-live="polite">
+                      {cartItem.quantity}
+                    </span>
+                    <button
+                      type="button"
+                      className="product-detail-qty-btn"
+                      onClick={handleIncrement}
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <Link to="/cart" className="product-detail-go-cart">
+                    Go to cart →
+                  </Link>
+                </div>
+              ) : (
+                <button type="button" className="btn product-detail-cta" onClick={handleAddToCart}>
+                  Add to cart
+                </button>
+              )}
             </Col>
           </Row>
 

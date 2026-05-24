@@ -235,6 +235,28 @@
   opacity: 0.65;
 }
 
+.cart-pincode-success {
+  color: #86efac !important;
+  font-size: 0.8rem;
+}
+
+.cart-pincode-error {
+  color: #fca5a5 !important;
+  font-size: 0.8rem;
+}
+
+.cart-checkout-modal-content .cart-readonly-field {
+  background: rgba(0, 0, 0, 0.18) !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  cursor: not-allowed;
+}
+
+.cart-checkout-modal-content .cart-readonly-field:focus {
+  background: rgba(0, 0, 0, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
+}
+
 /* ───────── Mobile: convert table rows to stacked cards ───────── */
 @media (max-width: 575.98px) {
   .cart-shell {

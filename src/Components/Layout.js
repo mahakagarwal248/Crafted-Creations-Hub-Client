@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import * as cartAPI from '../APIs/Cart';
 import { useAuth } from '../context/AuthContext';
 import Footer from './Footer';
+import ToastStack from './Toast';
 
 const defaultCart = { items: [] };
+const TOAST_DURATION = 3000;
 
 function Layout() {
   const { user, isHydrated } = useAuth();
@@ -12,6 +14,26 @@ function Layout() {
   // Wait for auth to load from localStorage so we use the correct cart (user vs guest)
   const cartId = isHydrated ? (user ? user._id : guestCartId) : null;
   const [cart, setCart] = useState(defaultCart);
+  const [toasts, setToasts] = useState([]);
+  const toastIdRef = useRef(0);
+
+  const dismissToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const showToast = useCallback((message, options = {}) => {
+    const id = ++toastIdRef.current;
+    setToasts((prev) => [
+      ...prev,
+      {
+        id,
+        message,
+        variant: options.variant || 'success',
+        duration: options.duration ?? TOAST_DURATION,
+      },
+    ]);
+    return id;
+  }, []);
 
   const refreshCart = useCallback(async () => {
     if (!cartId) return;
@@ -29,19 +51,30 @@ function Layout() {
 
   const addToCart = useCallback(
     async (item) => {
-      const updated = await cartAPI.addToCart(
-        cartId,
-        {
-          productId: item.productId,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity ?? 1,
-        },
-        user?._id
-      );
-      setCart(updated || defaultCart);
+      try {
+        const updated = await cartAPI.addToCart(
+          cartId,
+          {
+            productId: item.productId,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity ?? 1,
+          },
+          user?._id
+        );
+        setCart(updated || defaultCart);
+        const label = item?.name ? `"${item.name}" added to cart` : 'Item added to cart';
+        showToast(label, { variant: 'success' });
+        return updated;
+      } catch (err) {
+        showToast(
+          err?.response?.data?.message || err?.message || 'Could not add item to cart.',
+          { variant: 'error' }
+        );
+        throw err;
+      }
     },
-    [cartId, user?._id]
+    [cartId, user?._id, showToast]
   );
 
   const updateQuantity = useCallback(
@@ -83,8 +116,10 @@ function Layout() {
           removeFromCart,
           clearCart,
           refreshCart,
+          showToast,
         }}
       />
+      <ToastStack toasts={toasts} onDismiss={dismissToast} />
       <Footer />
     </>
   );

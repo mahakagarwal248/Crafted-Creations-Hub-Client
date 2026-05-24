@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useLocation } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import { sendCheckoutEmail } from '../APIs/Checkout';
 import { addOrders } from '../APIs/Orders';
 import { updateUserProfile } from '../APIs/auth';
+import { lookupPincode } from '../APIs/pincode';
 import { useAuth } from '../context/AuthContext';
 import './Catalogue.css';
 import './Cart.css';
@@ -33,6 +34,35 @@ function Cart() {
     state: '',
     pincode: '',
   });
+  const [pincodeLookup, setPincodeLookup] = useState({ status: 'idle', message: '' });
+
+  // Auto-fetch city/state whenever the pincode hits 6 digits while the
+  // checkout modal is open. City and state inputs stay read-only either way.
+  useEffect(() => {
+    if (!showCheckoutModal) return undefined;
+    const pin = formData.pincode?.toString().trim() ?? '';
+    if (!/^\d{6}$/.test(pin)) {
+      setPincodeLookup({ status: 'idle', message: '' });
+      setFormData((p) => (p.city || p.state ? { ...p, city: '', state: '' } : p));
+      return undefined;
+    }
+    const controller = new AbortController();
+    setPincodeLookup({ status: 'loading', message: 'Looking up city & state…' });
+    lookupPincode(pin, controller.signal)
+      .then((result) => {
+        setFormData((p) => ({ ...p, city: result.city, state: result.state }));
+        setPincodeLookup({ status: 'success', message: `${result.city}, ${result.state}` });
+      })
+      .catch((err) => {
+        if (err?.name === 'AbortError') return;
+        setFormData((p) => ({ ...p, city: '', state: '' }));
+        setPincodeLookup({
+          status: 'error',
+          message: err?.message || 'Could not look up this PIN code.',
+        });
+      });
+    return () => controller.abort();
+  }, [formData.pincode, showCheckoutModal]);
 
   const openCheckoutModal = () => {
     if (items.length === 0) {
@@ -70,8 +100,16 @@ function Cart() {
       window.alert('Please fill in your name and phone number.');
       return;
     }
-    if (!street || !cityT || !stateT || !pin) {
-      window.alert('Please fill in street address, city, state and PIN code.');
+    if (!street || !pin) {
+      window.alert('Please fill in street address and PIN code.');
+      return;
+    }
+    if (!/^\d{6}$/.test(pin)) {
+      window.alert('Please enter a valid 6-digit PIN code.');
+      return;
+    }
+    if (!cityT || !stateT || pincodeLookup.status !== 'success') {
+      window.alert('Please wait for the city and state to be verified from your PIN code.');
       return;
     }
     if (!user?._id) {
@@ -265,23 +303,38 @@ function Cart() {
                   type="text"
                   inputMode="numeric"
                   value={formData.pincode}
-                  onChange={(e) => setFormData((p) => ({ ...p, pincode: e.target.value }))}
-                  placeholder="PIN / postal code"
+                  onChange={(e) => {
+                    const next = e.target.value.replace(/\D/g, '').slice(0, 6);
+                    setFormData((p) => ({ ...p, pincode: next }));
+                  }}
+                  placeholder="6-digit PIN"
                   required
-                  minLength={4}
-                  maxLength={12}
+                  minLength={6}
+                  maxLength={6}
                   autoComplete="postal-code"
                 />
+                {pincodeLookup.status === 'loading' && (
+                  <Form.Text className="text-muted">{pincodeLookup.message}</Form.Text>
+                )}
+                {pincodeLookup.status === 'error' && (
+                  <Form.Text className="cart-pincode-error">{pincodeLookup.message}</Form.Text>
+                )}
+                {pincodeLookup.status === 'success' && (
+                  <Form.Text className="cart-pincode-success">
+                    Verified — {pincodeLookup.message}
+                  </Form.Text>
+                )}
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>City</Form.Label>
                 <Form.Control
                   type="text"
                   value={formData.city}
-                  onChange={(e) => setFormData((p) => ({ ...p, city: e.target.value }))}
-                  placeholder="City"
+                  placeholder="Auto-filled from PIN code"
                   required
+                  readOnly
                   autoComplete="address-level2"
+                  className="cart-readonly-field"
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -289,10 +342,11 @@ function Cart() {
                 <Form.Control
                   type="text"
                   value={formData.state}
-                  onChange={(e) => setFormData((p) => ({ ...p, state: e.target.value }))}
-                  placeholder="State"
+                  placeholder="Auto-filled from PIN code"
                   required
+                  readOnly
                   autoComplete="address-level1"
+                  className="cart-readonly-field"
                 />
               </Form.Group>
             </Modal.Body>

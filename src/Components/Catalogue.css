@@ -389,6 +389,85 @@
   color: #fff !important;
 }
 
+/* Quantity stepper used in product cards when item is already in cart */
+.catalogue-qty-stepper {
+  flex: 1;
+  min-width: 0;
+  display: inline-flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 0.2rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(201, 169, 98, 0.45);
+  background: rgba(201, 169, 98, 0.1);
+  gap: 0.25rem;
+}
+
+.catalogue-qty-btn {
+  width: 1.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8d5a3;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.catalogue-qty-btn:hover {
+  background: rgba(201, 169, 98, 0.25);
+  color: #fff7e0;
+}
+
+.catalogue-qty-value {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f5ead0;
+  min-width: 1.5rem;
+}
+
+.catalogue-card-cart-footer {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.catalogue-card-in-cart {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #86efac;
+}
+
+.catalogue-card-view-cart {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #e8d5a3 !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.catalogue-card-view-cart:hover {
+  color: #f5ead0 !important;
+  border-bottom-color: rgba(201, 169, 98, 0.45);
+}
+
 .catalogue-loading {
   min-height: 50vh;
   display: flex;

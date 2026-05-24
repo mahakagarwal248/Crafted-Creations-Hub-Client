@@ -187,6 +187,89 @@
   transform: translateY(0);
 }
 
+.product-detail-cart-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.product-detail-in-cart {
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(74, 222, 128, 0.14);
+  border: 1px solid rgba(74, 222, 128, 0.32);
+  color: #86efac;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.product-detail-qty-stepper {
+  display: inline-flex;
+  align-items: stretch;
+  padding: 0.3rem;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(201, 169, 98, 0.5);
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.18) 0%, rgba(166, 133, 64, 0.18) 100%);
+  gap: 0.35rem;
+}
+
+.product-detail-qty-btn {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5ead0;
+  border-radius: 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.product-detail-qty-btn:hover {
+  background: rgba(201, 169, 98, 0.3);
+  color: #fff7e0;
+}
+
+.product-detail-qty-btn:active {
+  transform: scale(0.95);
+}
+
+.product-detail-qty-value {
+  min-width: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fafafa;
+}
+
+.product-detail-go-cart {
+  color: #e8d5a3 !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.product-detail-go-cart:hover {
+  color: #f5ead0 !important;
+  border-bottom-color: rgba(201, 169, 98, 0.45);
+}
+
 .product-detail-reviews {
   margin-top: 2.5rem;
   padding-top: 1.75rem;
