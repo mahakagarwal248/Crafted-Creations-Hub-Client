@@ -68,6 +68,7 @@ function ProductDetail() {
     }
     setLoading(true);
     setError(null);
+    setProduct(null);
     getProductById(id)
       .then((data) => {
         if (!cancelled) setProduct(data);

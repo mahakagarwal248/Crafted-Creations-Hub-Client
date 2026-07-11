@@ -59,7 +59,7 @@ function Home() {
               catalogue.
             </p>
             <div className="home-actions">
-              <Link to="/catalogue" className="home-cta-primary">
+              <Link to="/categories" className="home-cta-primary">
                 View catalogue
               </Link>
               <Link to="/cart" className="home-cta-ghost">
@@ -78,31 +78,47 @@ function Home() {
                   ))}
                 </div>
               ) : (
-                <div className="home-featured-grid">
-                  {featuredCategories.map((cat) => (
-                    <Link
-                      key={cat._id}
-                      to={`/catalogue?category=${cat._id}`}
-                      className="home-category-card"
-                    >
-                      <div className="home-category-card-media">
+                <>
+                  <div className="home-featured-grid">
+                    {featuredCategories.map((cat) => (
+                      <Link
+                        key={cat._id}
+                        to={`/catalogue?category=${cat._id}`}
+                        className="home-category-card"
+                      >
+                        <div className="home-category-card-media">
                         {cat.imageUrl ? (
-                          <img src={cat.imageUrl} alt="" />
+                          <img src={cat.imageUrl} alt="" loading="lazy" decoding="async" />
                         ) : (
-                          <span className="home-category-card-placeholder" aria-hidden>
-                            {(cat.name || '?').charAt(0).toUpperCase()}
-                          </span>
-                        )}
+                            <span className="home-category-card-placeholder" aria-hidden>
+                              {(cat.name || '?').charAt(0).toUpperCase()}
+                            </span>
+                          )}
+                        </div>
+                        <div className="home-category-card-body">
+                          <span className="home-category-card-name">{cat.name}</span>
+                          {cat.isOccasional && (
+                            <span className="home-category-occasional">Occasional</span>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                    <Link
+                      to="/categories"
+                      className="home-category-card home-category-card--view-all"
+                      aria-label="View all categories"
+                    >
+                      <div className="home-category-card-media home-category-card-media--view-all">
+                        <span className="home-view-all-icon" aria-hidden>
+                          +
+                        </span>
                       </div>
-                      <div className="home-category-card-body">
-                        <span className="home-category-card-name">{cat.name}</span>
-                        {cat.isOccasional && (
-                          <span className="home-category-occasional">Occasional</span>
-                        )}
+                      <div className="home-category-card-body home-category-card-body--view-all">
+                        <span className="home-category-card-name">View all categories</span>
                       </div>
                     </Link>
-                  ))}
-                </div>
+                  </div>
+                </>
               )}
             </section>
           )}

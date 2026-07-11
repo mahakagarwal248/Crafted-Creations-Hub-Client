@@ -26,7 +26,7 @@ function Navbar({ variant = 'dark' }) {
         <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
       </Nav.Item>
       <Nav.Item as="li">
-        <Nav.Link onClick={() => navigate('/catalogue')}>Catalogue</Nav.Link>
+        <Nav.Link onClick={() => navigate('/categories')}>Catalogue</Nav.Link>
       </Nav.Item>
       <Nav.Item as="li">
         <Nav.Link onClick={() => navigate('/cart')}>

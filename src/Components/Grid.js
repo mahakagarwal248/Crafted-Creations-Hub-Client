@@ -5,7 +5,7 @@ import { useOutletContext, useNavigate, useLocation, Link } from 'react-router-d
 import { useAuth } from '../context/AuthContext';
 import './Catalogue.css';
 
-function ProductGrid({ data }) {
+function ProductGrid({ data, showCategoryViewMore = false }) {
   const outlet = useOutletContext() || {};
   const { addToCart, updateQuantity, removeFromCart, items = [] } = outlet;
   const { user } = useAuth();
@@ -44,12 +44,14 @@ function ProductGrid({ data }) {
 
   return (
     <>
-      {data.map((item) => (
+      {data.map((item) => {
+        const totalInCategory = item.totalCount ?? item.count ?? item.products?.length ?? 0;
+        return (
         <section key={String(item._id)} className="catalogue-category-block">
           <div className="catalogue-category-head">
             <h2 className="catalogue-category-title">{item.name || 'Uncategorized'}</h2>
-            <span className="catalogue-category-pill" aria-label={`${item.count} products`}>
-              {item.count} {item.count === 1 ? 'item' : 'items'}
+            <span className="catalogue-category-pill" aria-label={`${totalInCategory} products`}>
+              {totalInCategory} {totalInCategory === 1 ? 'item' : 'items'}
             </span>
           </div>
           <Row className="g-3 g-lg-4 catalogue-grid-row">
@@ -60,6 +62,8 @@ function ProductGrid({ data }) {
                     <img
                       alt={ele.name || 'product'}
                       src={(Array.isArray(ele.photos) && ele.photos[0]) || ele.imageUrl || logo}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                   <div className="catalogue-card-body">
@@ -126,9 +130,29 @@ function ProductGrid({ data }) {
                 </article>
               </Col>
             ))}
+            {showCategoryViewMore && item.hasMore && (
+              <Col sm={6} lg={4}>
+                <Link
+                  to={`/catalogue?category=${item._id}`}
+                  className="catalogue-card catalogue-card--view-more"
+                  aria-label={`View more in ${item.name || 'category'}`}
+                >
+                  <div className="catalogue-view-more-inner">
+                    <span className="catalogue-view-more-icon" aria-hidden>
+                      +
+                    </span>
+                    <span className="catalogue-view-more-label">View more</span>
+                    <span className="catalogue-view-more-count">
+                      {Math.max(0, totalInCategory - item.products.length)} more items
+                    </span>
+                  </div>
+                </Link>
+              </Col>
+            )}
           </Row>
         </section>
-      ))}
+        );
+      })}
     </>
   );
 }

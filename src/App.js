@@ -7,6 +7,7 @@ import Layout from './Components/Layout';
 import ScrollToTop from './Components/ScrollToTop';
 import Home from './Components/Home';
 import Catalogue from './Components/Catalogue';
+import CategoriesPage from './Components/CategoriesPage';
 import ProductDetail from './Components/ProductDetail';
 import Cart from './Components/Cart';
 import MyOrders from './Components/MyOrders';
@@ -26,6 +27,7 @@ function App() {
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
+                <Route path="/categories" element={<CategoriesPage />} />
                 <Route path="/catalogue" element={<Catalogue />} />
                 <Route path="/product/:productId" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />

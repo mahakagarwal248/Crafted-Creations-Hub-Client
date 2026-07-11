@@ -87,6 +87,19 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+.catalogue-back-link {
+  flex: 1 1 100%;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  margin-bottom: 0.15rem;
+  transition: color 0.15s ease;
+}
+
+.catalogue-back-link:hover {
+  color: #e8d5a3;
+}
+
 .catalogue-filter-group {
   flex: 1 1 12rem;
   min-width: 10rem;
@@ -150,6 +163,179 @@
 .catalogue-download-btn:disabled {
   opacity: 0.6;
   cursor: progress;
+}
+
+.catalogue-content {
+  position: relative;
+  min-height: 8rem;
+  transition: opacity 0.2s ease;
+}
+
+.catalogue-content--loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.catalogue-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(12, 12, 16, 0.45);
+  backdrop-filter: blur(2px);
+  border-radius: 0.75rem;
+  min-height: 12rem;
+}
+
+.catalogue-loader-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #c9a962;
+  border-radius: 50%;
+  animation: catalogue-spin 0.75s linear infinite;
+}
+
+.catalogue-loader-text {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
+
+.catalogue-loader--inline {
+  position: static;
+  inset: auto;
+  min-height: 5rem;
+  background: transparent;
+  backdrop-filter: none;
+  margin-top: 0.5rem;
+}
+
+.catalogue-infinite-sentinel {
+  width: 100%;
+  height: 1px;
+  margin-top: 0.5rem;
+}
+
+.catalogue-infinite-end {
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 1.25rem 0 0;
+}
+
+.catalogue-filter-count {
+  color: rgba(255, 255, 255, 0.38);
+  font-weight: 400;
+}
+
+@keyframes catalogue-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.catalogue-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.catalogue-pagination-info {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.catalogue-pagination-btn {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.88);
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.catalogue-pagination-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.catalogue-pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.catalogue-category-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.85rem;
+}
+
+.catalogue-card--view-more {
+  display: flex;
+  align-items: stretch;
+  min-height: 100%;
+  text-decoration: none;
+  border-style: dashed;
+  border-color: rgba(201, 169, 98, 0.35);
+  background: rgba(201, 169, 98, 0.04);
+}
+
+.catalogue-card--view-more:hover {
+  border-color: rgba(201, 169, 98, 0.6);
+  background: rgba(201, 169, 98, 0.1);
+  transform: translateY(-2px);
+}
+
+.catalogue-view-more-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  min-height: 280px;
+}
+
+.catalogue-view-more-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 169, 98, 0.45);
+  background: rgba(201, 169, 98, 0.12);
+  color: #e8d5a3;
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.catalogue-view-more-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #e8d5a3;
+}
+
+.catalogue-view-more-count {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 @media (min-width: 768px) {

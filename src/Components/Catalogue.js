@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -9,16 +9,35 @@ import { downloadCategoryCataloguePdf, getCategories } from '../APIs/categoryApi
 import { useAuth } from '../context/AuthContext';
 import Navbar from './Navbar';
 import ProductGrid from './Grid';
+import CatalogueLoader from './CatalogueLoader';
 import { ProductCardSkeleton, Skeleton } from './Skeleton';
 import './Catalogue.css';
+
+const CATALOGUE_PAGE_LIMIT = 12;
 
 function Catalogue() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFilter = searchParams.get('category') || '';
+
+  if (!categoryFilter) {
+    return <Navigate to="/categories" replace />;
+  }
+
+  return <CatalogueProducts categoryFilter={categoryFilter} setSearchParams={setSearchParams} />;
+}
+
+function CatalogueProducts({ categoryFilter, setSearchParams }) {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [downloadingCatalogue, setDownloadingCatalogue] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const sentinelRef = useRef(null);
+  const loadingMoreRef = useRef(false);
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
 
@@ -50,29 +69,94 @@ function Catalogue() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+    setProducts([]);
     setLoading(true);
-    getProducts(categoryFilter || undefined)
+    setPage(1);
+    setHasMore(false);
+
+    getProducts(categoryFilter, { page: 1, limit: CATALOGUE_PAGE_LIMIT })
       .then((res) => {
+        if (cancelled) return;
         setProducts(res?.categories ?? []);
+        setTotalCount(res?.totalCount || 0);
+        setHasMore((res?.page || 1) < (res?.totalPages || 1));
       })
       .catch((err) => {
-        console.log(err);
+        if (cancelled) return;
         window.alert(err?.message || String(err));
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [categoryFilter]);
+
+  const loadMore = useCallback(async () => {
+    if (!categoryFilter || loadingMoreRef.current || !hasMore || loading) return;
+    loadingMoreRef.current = true;
+    setLoadingMore(true);
+    try {
+      const nextPage = page + 1;
+      const res = await getProducts(categoryFilter, {
+        page: nextPage,
+        limit: CATALOGUE_PAGE_LIMIT,
+      });
+      const nextBatch = res?.categories?.[0]?.products ?? [];
+      setProducts((prev) => {
+        if (!prev.length) return res?.categories ?? [];
+        const [first, ...rest] = prev;
+        return [
+          {
+            ...first,
+            products: [...(first.products || []), ...nextBatch],
+          },
+          ...rest,
+        ];
+      });
+      setPage(nextPage);
+      setHasMore(nextPage < (res?.totalPages || 1));
+      setTotalCount(res?.totalCount || 0);
+    } catch (err) {
+      window.alert(err?.message || 'Could not load more products.');
+    } finally {
+      loadingMoreRef.current = false;
+      setLoadingMore(false);
+    }
+  }, [categoryFilter, page, hasMore, loading]);
+
+  useEffect(() => {
+    if (!categoryFilter || !hasMore) return undefined;
+    const node = sentinelRef.current;
+    if (!node) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) loadMore();
+      },
+      { rootMargin: '240px' },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [categoryFilter, hasMore, loadMore, products.length]);
 
   const onCategoryFilterChange = (e) => {
     const value = e.target.value;
     if (value) {
       setSearchParams({ category: value });
     } else {
-      setSearchParams({});
+      navigate('/categories');
     }
   };
 
   const filterBar = (
     <div className="catalogue-filter-bar">
+      <Link to="/categories" className="catalogue-back-link">
+        ← All categories
+      </Link>
       <Form.Group className="catalogue-filter-group mb-0">
         <Form.Label htmlFor="catalogue-category-filter" className="catalogue-filter-label">
           Category
@@ -84,7 +168,7 @@ function Catalogue() {
           className="catalogue-filter-select"
           disabled={loading && !categories.length}
         >
-          <option value="">All categories</option>
+          <option value="">Browse categories</option>
           {categories.map((cat) => (
             <option key={cat._id} value={cat._id}>
               {cat.name}
@@ -95,6 +179,9 @@ function Catalogue() {
       {activeCategoryName && (
         <p className="catalogue-filter-active mb-0">
           Showing: <span>{activeCategoryName}</span>
+          {totalCount > 0 && (
+            <span className="catalogue-filter-count"> · {totalCount} products</span>
+          )}
         </p>
       )}
       {isAdmin && categoryFilter && (
@@ -110,7 +197,9 @@ function Catalogue() {
     </div>
   );
 
-  if (loading && !products.length) {
+  const showInitialSkeleton = loading && !products.length;
+
+  if (showInitialSkeleton) {
     return (
       <div className="catalogue-page">
         <Navbar />
@@ -151,7 +240,18 @@ function Catalogue() {
           </p>
         </header>
         {filterBar}
-        <ProductGrid data={products} />
+        <div className={loading ? 'catalogue-content catalogue-content--loading' : 'catalogue-content'}>
+          <ProductGrid data={products} />
+          {categoryFilter && hasMore && (
+            <div ref={sentinelRef} className="catalogue-infinite-sentinel" aria-hidden="true" />
+          )}
+          {categoryFilter && loadingMore && (
+            <CatalogueLoader inline label="Loading more products…" />
+          )}
+          {categoryFilter && !hasMore && !loading && totalCount > CATALOGUE_PAGE_LIMIT && (
+            <p className="catalogue-infinite-end">All {totalCount} products loaded.</p>
+          )}
+        </div>
       </Container>
     </div>
   );
